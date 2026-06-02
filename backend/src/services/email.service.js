@@ -1,20 +1,5 @@
-import nodemailer from 'nodemailer';
 import dotenv from 'dotenv';
 dotenv.config();
-
-const transporter = nodemailer.createTransport({
-  host: "smtp.gmail.com",
-  port: 587,
-  secure: false,
-  family: 4, // force IPv4
-  auth: {
-    user: process.env.SMTP_USER,
-    pass: process.env.SMTP_PASS,
-  },
-  connectionTimeout: 10000,
-  greetingTimeout: 10000,
-  socketTimeout: 10000,
-});
 
 /**
  * Sends a verification code email to the user.
@@ -24,33 +9,31 @@ const transporter = nodemailer.createTransport({
  */
 export const sendVerificationEmail = async (toEmail, code, name) => {
   try {
-    const fromAddress = `"VibrantLink" <${process.env.SMTP_USER}>`; 
+    const mailServiceUrl = process.env.MAIL_SERVICE_URL || 'http://localhost:5001';
     
-    const info = await transporter.sendMail({
-      from: fromAddress,
-      to: toEmail,
-      subject: 'Verify your VibrantLink account',
-      html: `
-        <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px; border: 2px solid #000; border-radius: 12px; background-color: #f8f9fa;">
-          <h2 style="color: #006d37; margin-bottom: 20px;">Welcome to VibrantLink, ${name}!</h2>
-          <p style="font-size: 16px; color: #191c1d; line-height: 1.5;">
-            Thank you for signing up. To complete your registration and secure your account, please use the verification code below:
-          </p>
-          <div style="background-color: #fff; padding: 20px; border: 2px solid #000; border-radius: 8px; text-align: center; margin: 30px 0;">
-            <span style="font-size: 32px; font-weight: bold; letter-spacing: 5px; color: #006d37;">${code}</span>
-          </div>
-          <p style="font-size: 14px; color: #5e5e5e; line-height: 1.5;">
-            This code will expire in 15 minutes. If you did not create an account, you can safely ignore this email.
-          </p>
-        </div>
-      `,
+    console.log(`\n=========================================`);
+    console.log(`🔒 Dispatching email to mail-service for: ${toEmail}`);
+    console.log(`=========================================\n`);
+
+    const response = await fetch(`${mailServiceUrl}/api/send-verification`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'x-mail-api-key': process.env.MAIL_API_KEY
+      },
+      body: JSON.stringify({ toEmail, code, name })
     });
 
-    console.log('Verification email sent successfully:', info.messageId);
-    return { success: true, data: info };
+    if (!response.ok) {
+      const errorData = await response.json();
+      throw new Error(errorData.error || 'Failed to send email via mail-service');
+    }
+
+    const data = await response.json();
+    console.log('Verification email sent successfully via microservice:', data.messageId);
+    return { success: true, data };
   } catch (error) {
-    console.error('Failed to send verification email via Nodemailer:', error.message);
-    // We throw the error so the calling function knows the email failed to dispatch
+    console.error('Failed to send verification email via mail-service:', error.message);
     throw new Error(`Email delivery failed: ${error.message}`);
   }
 };
