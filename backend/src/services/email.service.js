@@ -37,3 +37,36 @@ export const sendVerificationEmail = async (toEmail, code, name) => {
     throw new Error(`Email delivery failed: ${error.message}`);
   }
 };
+
+/**
+ * Sends a password reset code email to the user.
+ * @param {string} toEmail - The user's email address
+ * @param {string} code - The 6-digit password reset code
+ * @param {string} name - The user's name
+ */
+export const sendPasswordResetEmail = async (toEmail, code, name) => {
+  try {
+    const mailServiceUrl = process.env.MAIL_SERVICE_URL || 'http://localhost:5001';
+
+    const response = await fetch(`${mailServiceUrl}/api/send-password-reset`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'x-mail-api-key': process.env.MAIL_API_KEY
+      },
+      body: JSON.stringify({ toEmail, code, name })
+    });
+
+    if (!response.ok) {
+      const errorData = await response.json();
+      throw new Error(errorData.error || 'Failed to send password reset email via mail-service');
+    }
+
+    const data = await response.json();
+    console.log('Password reset email sent successfully via microservice:', data.messageId);
+    return { success: true, data };
+  } catch (error) {
+    console.error('Failed to send password reset email via mail-service:', error.message);
+    throw new Error(`Email delivery failed: ${error.message}`);
+  }
+};

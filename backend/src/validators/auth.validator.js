@@ -15,7 +15,7 @@ const loginSchema = Joi.object({
 });
 
 const changePasswordSchema = Joi.object({
-  currentPassword: Joi.string().required(),
+  otpCode: Joi.string().required(),
   newPassword: Joi.string().min(8).required()
     .messages({
       'string.min': 'New password must be at least 8 characters long',

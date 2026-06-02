@@ -5,7 +5,7 @@ import { Loader2 } from 'lucide-react';
 import toast from 'react-hot-toast';
 
 export const ChangePasswordModal = ({ isOpen, onClose }) => {
-  const [currentPassword, setCurrentPassword] = useState('');
+  const [otpCode, setOtpCode] = useState('');
   const [newPassword, setNewPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [loading, setLoading] = useState(false);
@@ -23,11 +23,11 @@ export const ChangePasswordModal = ({ isOpen, onClose }) => {
     }
 
     try {
-      await authService.changePassword(currentPassword, newPassword);
+      await authService.changePassword(otpCode, newPassword);
       toast.success('Password changed successfully!');
       
       // Reset form
-      setCurrentPassword('');
+      setOtpCode('');
       setNewPassword('');
       setConfirmPassword('');
       onClose();
@@ -48,16 +48,17 @@ export const ChangePasswordModal = ({ isOpen, onClose }) => {
       
       <form onSubmit={handleSubmit} className="space-y-4">
         <div className="space-y-2">
-          <label className="text-sm font-bold leading-none" htmlFor="currentPassword">
-            Current Password <span className="text-destructive">*</span>
+          <label className="text-sm font-bold leading-none" htmlFor="otpCode">
+            Verification Code <span className="text-destructive">*</span>
           </label>
           <input
-            id="currentPassword"
-            type="password"
+            id="otpCode"
+            type="text"
             required
+            placeholder="6-digit code sent to your email"
             className="flex h-12 w-full rounded-2xl border-2 border-black bg-background px-4 py-2 text-sm font-medium focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-primary/20 transition-all invalid:[&:not(:placeholder-shown):not(:focus)]:border-red-500 invalid:[&:not(:placeholder-shown):not(:focus)]:text-red-500"
-            value={currentPassword}
-            onChange={(e) => setCurrentPassword(e.target.value)}
+            value={otpCode}
+            onChange={(e) => setOtpCode(e.target.value)}
           />
         </div>
         

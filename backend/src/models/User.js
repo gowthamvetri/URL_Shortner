@@ -29,6 +29,12 @@ const userSchema = new mongoose.Schema(
     verificationCodeExpires: {
       type: Date,
     },
+    passwordResetCode: {
+      type: String,
+    },
+    passwordResetCodeExpires: {
+      type: Date,
+    },
   },
   {
     timestamps: true,

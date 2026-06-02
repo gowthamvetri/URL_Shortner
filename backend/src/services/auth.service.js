@@ -1,7 +1,7 @@
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
 import User from '../models/User.js';
-import { sendVerificationEmail } from './email.service.js';
+import { sendVerificationEmail, sendPasswordResetEmail } from './email.service.js';
 
 const SALT_ROUNDS = 10;
 const JWT_SECRET = process.env.JWT_SECRET || 'super_secret_jwt_key_for_dev';
@@ -95,7 +95,7 @@ const getUserById = async (userId) => {
   return user;
 };
 
-const changePassword = async (userId, currentPassword, newPassword) => {
+const requestPasswordChangeOTP = async (userId) => {
   const user = await User.findById(userId);
   if (!user) {
     const error = new Error('User not found');
@@ -103,10 +103,41 @@ const changePassword = async (userId, currentPassword, newPassword) => {
     throw error;
   }
 
-  // Check current password
-  const isMatch = await bcrypt.compare(currentPassword, user.passwordHash);
-  if (!isMatch) {
-    const error = new Error('Incorrect current password');
+  // Generate new code
+  const resetCode = Math.floor(100000 + Math.random() * 900000).toString();
+  const resetCodeExpires = new Date(Date.now() + 15 * 60 * 1000); // 15 mins
+
+  user.passwordResetCode = resetCode;
+  user.passwordResetCodeExpires = resetCodeExpires;
+  await user.save();
+
+  try {
+    await sendPasswordResetEmail(user.email, resetCode, user.name);
+  } catch (emailError) {
+    const error = new Error('Failed to send password reset email. Please try again later.');
+    error.statusCode = 500;
+    throw error;
+  }
+
+  return { message: 'Password reset code sent to your email' };
+};
+
+const changePassword = async (userId, newPassword, otpCode) => {
+  const user = await User.findById(userId);
+  if (!user) {
+    const error = new Error('User not found');
+    error.statusCode = 404;
+    throw error;
+  }
+
+  if (!user.passwordResetCode || user.passwordResetCode !== otpCode) {
+    const error = new Error('Invalid verification code');
+    error.statusCode = 400;
+    throw error;
+  }
+
+  if (user.passwordResetCodeExpires < new Date()) {
+    const error = new Error('Verification code has expired');
     error.statusCode = 400;
     throw error;
   }
@@ -115,6 +146,9 @@ const changePassword = async (userId, currentPassword, newPassword) => {
   const passwordHash = await bcrypt.hash(newPassword, SALT_ROUNDS);
   
   user.passwordHash = passwordHash;
+  // Clear the reset code
+  user.passwordResetCode = undefined;
+  user.passwordResetCodeExpires = undefined;
   await user.save();
   
   return { message: 'Password updated successfully' };
@@ -198,6 +232,7 @@ export {
   registerUser,
   loginUser,
   getUserById,
+  requestPasswordChangeOTP,
   changePassword,
   generateToken,
   verifyEmail,

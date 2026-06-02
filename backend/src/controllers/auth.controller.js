@@ -46,6 +46,16 @@ const getMe = async (req, res) => {
   }
 };
 
+const requestPasswordChangeOTP = async (req, res) => {
+  try {
+    const result = await authService.requestPasswordChangeOTP(req.user.id);
+    return res.status(200).json(result);
+  } catch (error) {
+    const statusCode = error.statusCode || 500;
+    return res.status(statusCode).json({ error: error.message || 'Internal server error' });
+  }
+};
+
 const changePassword = async (req, res) => {
   try {
     const { error, value } = changePasswordSchema.validate(req.body);
@@ -53,8 +63,8 @@ const changePassword = async (req, res) => {
       return res.status(400).json({ error: error.details[0].message });
     }
 
-    const { currentPassword, newPassword } = value;
-    const result = await authService.changePassword(req.user.id, currentPassword, newPassword);
+    const { otpCode, newPassword } = value;
+    const result = await authService.changePassword(req.user.id, newPassword, otpCode);
 
     return res.status(200).json(result);
   } catch (error) {
@@ -92,6 +102,7 @@ export {
   register,
   login,
   getMe,
+  requestPasswordChangeOTP,
   changePassword,
   verifyEmail,
   resendVerificationCode

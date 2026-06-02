@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom';
-import { Link2, Zap, BarChart3, Shield } from 'lucide-react';
+import { Link2, Zap, BarChart3, Shield, Users } from 'lucide-react';
 
 const Landing = () => {
   return (
@@ -25,35 +25,74 @@ const Landing = () => {
 
       {/* Hero Section */}
       <main className="flex-1 relative overflow-hidden">
-        {/* Organic Blobs */}
-        <div className="absolute top-[-10%] left-[-10%] w-[500px] h-[500px] bg-primary rounded-full mix-blend-multiply filter blur-[100px] opacity-30 z-0 pointer-events-none"></div>
-        <div className="absolute bottom-[-10%] right-[-10%] w-[500px] h-[500px] bg-secondary rounded-full mix-blend-multiply filter blur-[100px] opacity-30 z-0 pointer-events-none"></div>
-        
-        <section className="w-full py-20 md:py-32 lg:py-48 flex items-center justify-center relative z-10">
+        {/* New Hero Section */}
+        <section className="w-full py-20 lg:py-32 flex items-center justify-center relative z-10 overflow-hidden bg-background">
           <div className="container px-4 md:px-6">
-            <div className="flex flex-col items-center space-y-4 text-center">
-              <div className="space-y-4">
-                <h1 className="text-5xl font-heading font-extrabold tracking-tight sm:text-6xl md:text-7xl lg:text-8xl">
-                  Shorten your links, <br/><span className="text-primary underline decoration-secondary decoration-8 underline-offset-8">expand your reach.</span>
+            <div className="grid lg:grid-cols-2 gap-16 lg:gap-8 items-center">
+              
+              {/* Left Side: Content */}
+              <div className="flex flex-col space-y-8 text-left lg:pr-10">
+                <h1 className="text-5xl font-heading font-extrabold tracking-tight sm:text-6xl lg:text-[72px] leading-[1.1] text-foreground">
+                  Shorten Your Reach, <br className="hidden lg:block" />
+                  Not Your Impact
                 </h1>
-                <p className="mx-auto max-w-[700px] text-muted-foreground md:text-xl pt-4 font-medium">
-                  A modern, powerful URL shortener that gives you full control and insights over your links. Track clicks, location, and devices all from an elegant dashboard.
+                
+                <p className="max-w-[600px] text-muted-foreground md:text-xl font-medium leading-relaxed">
+                  Transform long, unwieldy URLs into clean, trackable links. Elevate your brand presence and gather insights with every click.
                 </p>
+
+                {/* Dots / Pills decoration */}
+                <div className="flex items-center space-x-2 pt-2">
+                  <div className="w-8 h-3 bg-black rounded-full"></div>
+                  <div className="w-3 h-3 bg-primary rounded-full"></div>
+                  <div className="w-3 h-3 bg-black rounded-full"></div>
+                  <div className="w-8 h-3 bg-primary rounded-full"></div>
+                </div>
+                
+                {/* Input box */}
+                <div className="mt-8 flex flex-col sm:flex-row items-center bg-white border-[3px] border-black rounded-full p-2 max-w-xl shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] w-full relative group transition-transform hover:-translate-y-1">
+                  <input 
+                    type="text" 
+                    placeholder="Paste your long URL here..." 
+                    className="flex-1 bg-transparent px-6 py-4 outline-none font-medium text-black placeholder:text-muted-foreground w-full sm:w-auto text-base"
+                  />
+                  <Link 
+                    to="/register" 
+                    className="inline-flex items-center justify-center rounded-full text-sm font-bold transition-transform active:scale-95 h-12 px-8 border-2 border-black bg-primary text-black whitespace-nowrap mt-2 sm:mt-0 w-full sm:w-auto hover:bg-[#3ceb8b]"
+                  >
+                    Getting Started
+                  </Link>
+                </div>
               </div>
-              <div className="space-x-4 pt-8">
-                <Link 
-                  to="/register" 
-                  className="inline-flex items-center justify-center rounded-full text-base font-bold transition-all hover:-translate-y-1 h-14 px-8 border-2 border-black shadow-hard hover:shadow-hard-lg bg-primary text-primary-foreground focus-visible:outline-none"
-                >
-                  Start for free
-                </Link>
-                <Link 
-                  to="/login" 
-                  className="inline-flex items-center justify-center rounded-full text-base font-bold transition-all hover:-translate-y-1 h-14 px-8 border-2 border-black shadow-hard hover:shadow-hard-lg bg-white text-foreground focus-visible:outline-none"
-                >
-                  View Dashboard
-                </Link>
+
+              {/* Right Side: Artwork */}
+              <div className="relative flex justify-center items-center pt-20 lg:pt-0 min-h-[500px]">
+                
+                {/* Background Blobs */}
+                <div className="absolute w-[120%] h-[120%] max-w-[600px] max-h-[600px] bg-[#FFD12A] rounded-[40%_60%_70%_30%_/_40%_50%_60%_50%] border-[3px] border-black top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 rotate-12 -z-20"></div>
+                
+                <div className="absolute w-[100%] h-[100%] max-w-[500px] max-h-[500px] bg-primary rounded-[50%_50%_40%_60%_/_60%_40%_50%_50%] border-[3px] border-black top-1/2 left-1/2 -translate-x-[60%] -translate-y-[40%] -rotate-12 -z-10"></div>
+                
+                {/* Center Frame with Image */}
+                <div className="relative z-10 w-[280px] h-[380px] sm:w-[320px] sm:h-[440px] border-[4px] border-black rounded-[60px] bg-[#97E2D5] overflow-hidden shadow-none flex items-center justify-center">
+                  <img src="/hero-image.png" alt="Hero" className="w-full h-full object-cover" />
+                </div>
+
+                {/* Floating Card */}
+                <div className="absolute z-20 bottom-10 -right-4 sm:-right-12 bg-white border-[3px] border-black rounded-[24px] p-4 flex items-center space-x-4 shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] max-w-[280px] w-full transform rotate-2 hover:rotate-0 transition-transform">
+                  <div className="w-12 h-12 rounded-full bg-[#FFD12A] border-2 border-black flex items-center justify-center shrink-0">
+                    <Users className="h-6 w-6 text-black" />
+                  </div>
+                  <div>
+                    <h4 className="font-bold text-sm text-black leading-tight mb-1">Interactive Engagement</h4>
+                    <p className="text-[11px] text-muted-foreground leading-snug font-medium">
+                      Engaging participation enhances learning, fostering interactive collaboration, and feedback.
+                    </p>
+                  </div>
+                </div>
+
               </div>
+
             </div>
           </div>
         </section>

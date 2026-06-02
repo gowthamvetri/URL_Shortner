@@ -2,10 +2,27 @@ import { useContext, useState } from 'react';
 import { AuthContext } from '../context/AuthContext';
 import { User, Mail, Shield, Bell } from 'lucide-react';
 import { ChangePasswordModal } from '../components/ChangePasswordModal';
+import toast from 'react-hot-toast';
+import { authService } from '../services/auth.service';
 
 const Settings = () => {
   const { user } = useContext(AuthContext);
   const [isPasswordModalOpen, setIsPasswordModalOpen] = useState(false);
+  const [isRequestingOtp, setIsRequestingOtp] = useState(false);
+
+  const handlePasswordChangeClick = async () => {
+    setIsRequestingOtp(true);
+    const toastId = toast.loading('Sending verification code to your email...');
+    try {
+      await authService.requestPasswordChangeOTP();
+      toast.success('Verification code sent!', { id: toastId });
+      setIsPasswordModalOpen(true);
+    } catch (err) {
+      toast.error(err.response?.data?.error || 'Failed to send verification code', { id: toastId });
+    } finally {
+      setIsRequestingOtp(false);
+    }
+  };
 
   return (
     <div className="space-y-6 max-w-4xl relative">
@@ -74,10 +91,11 @@ const Settings = () => {
                 <p className="text-sm font-medium text-muted-foreground">Update your password to keep your account secure.</p>
               </div>
               <button 
-                onClick={() => setIsPasswordModalOpen(true)}
-                className="inline-flex items-center justify-center rounded-full text-sm font-bold transition-all hover:-translate-y-1 h-12 px-6 border-2 border-black shadow-hard hover:shadow-hard-lg bg-white text-foreground focus-visible:outline-none shrink-0"
+                onClick={handlePasswordChangeClick}
+                disabled={isRequestingOtp}
+                className="inline-flex items-center justify-center rounded-full text-sm font-bold transition-all hover:-translate-y-1 h-12 px-6 border-2 border-black shadow-hard hover:shadow-hard-lg bg-white text-foreground focus-visible:outline-none shrink-0 disabled:opacity-50 disabled:pointer-events-none"
               >
-                Change Password
+                {isRequestingOtp ? 'Sending...' : 'Change Password'}
               </button>
             </div>
           </div>
