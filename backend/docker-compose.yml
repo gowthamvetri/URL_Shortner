@@ -1,0 +1,23 @@
+version: '3.8'
+
+services:
+  backend:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: vibrantlink-backend
+    ports:
+      - "5000:5000"
+    # Mount the .env file if it exists, or provide variables directly via environment
+    env_file:
+      - .env
+    environment:
+      - NODE_ENV=development
+    volumes:
+      # Mount the current directory to /app in the container to enable hot-reloading (if using nodemon)
+      - .:/app
+      # Exclude node_modules from being overwritten by the host
+      - /app/node_modules
+    # Optional: use nodemon for local development by overriding the CMD
+    # command: npm run dev
+    restart: unless-stopped
