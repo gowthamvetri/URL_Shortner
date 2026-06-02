@@ -1,0 +1,87 @@
+@import "tailwindcss";
+
+@custom-variant dark (&:is(.dark *));
+
+@theme {
+  /* Fonts */
+  --font-sans: "Cause", sans-serif;
+  --font-heading: "Cause", sans-serif;
+  --font-body: "Cause", sans-serif;
+
+  /* Colors */
+  --color-background: #f8f9fa;
+  --color-foreground: #191c1d;
+
+  --color-primary: #2ecc71; /* Mint Green */
+  --color-primary-foreground: #000000;
+
+  --color-secondary: #F1C40F; /* Vibrant Yellow */
+  --color-secondary-foreground: #000000;
+
+  --color-destructive: #ba1a1a;
+  --color-destructive-foreground: #ffffff;
+
+  --color-muted: #e7e8e9;
+  --color-muted-foreground: #5e5e5e;
+
+  --color-accent: #f0f1f2;
+  --color-accent-foreground: #191c1d;
+
+  --color-popover: #ffffff;
+  --color-popover-foreground: #191c1d;
+
+  --color-card: #ffffff;
+  --color-card-foreground: #191c1d;
+
+  /* Borders / Structural */
+  --color-border: #000000;
+  --color-input: #000000;
+  --color-ring: #2ecc71;
+
+  /* Corner Radii */
+  --radius-sm: 8px;
+  --radius-md: 12px;
+  --radius-lg: 16px;
+  --radius-xl: 24px;
+  --radius-full: 9999px;
+
+  /* Neo-Brutalist Hard Shadows */
+  --shadow-hard: 4px 4px 0px 0px rgba(0,0,0,1);
+  --shadow-hard-lg: 8px 8px 0px 0px rgba(0,0,0,1);
+
+  /* Animations */
+  --animate-accordion-down: accordion-down 0.2s ease-out;
+  --animate-accordion-up: accordion-up 0.2s ease-out;
+
+  @keyframes accordion-down {
+    from { height: 0; }
+    to { height: var(--radix-accordion-content-height); }
+  }
+
+  @keyframes accordion-up {
+    from { height: var(--radix-accordion-content-height); }
+    to { height: 0; }
+  }
+}
+
+@layer base {
+  *,
+  ::after,
+  ::before,
+  ::backdrop,
+  ::file-selector-button {
+    border-color: var(--color-border, currentColor);
+  }
+  body {
+    background-color: var(--color-background);
+    color: var(--color-foreground);
+    font-family: var(--font-body);
+    font-feature-settings: "rlig" 1, "calt" 1;
+    -webkit-font-smoothing: antialiased;
+  }
+  h1, h2, h3, h4, h5, h6 {
+    font-family: var(--font-heading);
+    font-weight: 800;
+    letter-spacing: -0.02em;
+  }
+}
