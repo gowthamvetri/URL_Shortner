@@ -4,12 +4,13 @@ dotenv.config();
 
 const transporter = nodemailer.createTransport({
   host: 'smtp.gmail.com',
-  port: 465,
-  secure: true,
+  port: 587,
+  secure: false,
   auth: {
     user: process.env.SMTP_USER,
     pass: process.env.SMTP_PASS,
   },
+  family: 4,
 });
 
 /**
@@ -22,11 +23,6 @@ export const sendVerificationEmail = async (toEmail, code, name) => {
   try {
     const fromAddress = `"VibrantLink" <${process.env.SMTP_USER}>`; 
     
-    // Fallback console log for development in case the email fails to send due to unverified domain
-    console.log(`\n=========================================`);
-    console.log(`🔒 VERIFICATION CODE FOR ${toEmail}: ${code}`);
-    console.log(`=========================================\n`);
-
     const info = await transporter.sendMail({
       from: fromAddress,
       to: toEmail,
