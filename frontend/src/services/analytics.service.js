@@ -5,4 +5,8 @@ export const analyticsService = {
     const response = await api.get(`/analytics/${urlId}`);
     return response.data;
   },
+  getGlobalAnalytics: async () => {
+    const response = await api.get('/analytics/global');
+    return response.data;
+  }
 };

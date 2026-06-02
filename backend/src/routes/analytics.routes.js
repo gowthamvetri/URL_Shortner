@@ -6,6 +6,7 @@ const router = express.Router();
 
 router.use(requireAuth); // Protect all analytics routes
 
+router.get('/global', analyticsController.getGlobalAnalytics);
 router.get('/:urlId', analyticsController.getAnalytics);
 
 export default router;

@@ -12,6 +12,17 @@ const getAnalytics = async (req, res) => {
   }
 };
 
+const getGlobalAnalytics = async (req, res) => {
+  try {
+    const analyticsData = await analyticsService.getGlobalAnalytics(req.user.id);
+    return res.status(200).json(analyticsData);
+  } catch (error) {
+    const statusCode = error.statusCode || 500;
+    return res.status(statusCode).json({ error: error.message || 'Internal server error' });
+  }
+};
+
 export {
-  getAnalytics
+  getAnalytics,
+  getGlobalAnalytics
 };
