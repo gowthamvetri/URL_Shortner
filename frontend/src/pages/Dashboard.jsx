@@ -77,6 +77,20 @@ const Dashboard = () => {
           }
         }
 
+        if (newAnalytics.charts && newAnalytics.charts.referrer && eventData.referrer) {
+          const referrerIndex = newAnalytics.charts.referrer.findIndex(r => r.name === eventData.referrer);
+          if (referrerIndex !== -1) {
+            newAnalytics.charts.referrer[referrerIndex] = {
+              ...newAnalytics.charts.referrer[referrerIndex],
+              count: newAnalytics.charts.referrer[referrerIndex].count + 1
+            };
+          } else {
+            newAnalytics.charts.referrer.push({ name: eventData.referrer, count: 1 });
+          }
+          newAnalytics.charts.referrer.sort((a, b) => b.count - a.count);
+          newAnalytics.charts.referrer = newAnalytics.charts.referrer.slice(0, 5);
+        }
+
         return newAnalytics;
       });
     };

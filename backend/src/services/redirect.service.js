@@ -35,6 +35,8 @@ const processRedirect = async (shortCode, req) => {
   // 4. Record Visit (Asynchronously so it doesn't block redirection)
   recordVisit(url._id, req).catch(console.error);
 
+  const referrer = req.headers.referer || req.headers.referrer || 'Direct';
+
   // 5. Emit live stat event via Socket.IO
   const io = req.app.get('io');
   if (io && url.userId) {
@@ -42,7 +44,8 @@ const processRedirect = async (shortCode, req) => {
       shortCode: url.shortCode,
       clickCount: url.clickCount,
       timestamp: new Date().toISOString(),
-      originalUrl: url.originalUrl
+      originalUrl: url.originalUrl,
+      referrer: referrer
     });
   }
 
