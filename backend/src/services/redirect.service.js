@@ -2,47 +2,77 @@ import Url from '../models/Url.js';
 import Visit from '../models/Visit.js';
 import useragent from 'useragent';
 import geoip from 'geoip-lite';
+import redisClient from '../config/redis.js';
+
+const CACHE_TTL_SECONDS = 86400; // 24 hours
 
 const processRedirect = async (shortCode, req) => {
-  // 1. Find URL
-  const url = await Url.findOne({
-    $or: [{ shortCode }, { customAlias: shortCode }],
-  });
+  const cacheKey = `url:${shortCode}`;
+  let url = null;
 
-  if (!url) {
-    const error = new Error('URL not found');
-    error.statusCode = 404;
-    throw error;
+  // 1. Try to get from Cache
+  if (redisClient) {
+    try {
+      const cachedUrl = await redisClient.get(cacheKey);
+      if (cachedUrl) {
+        // @upstash/redis parses JSON automatically if it was stored as JSON
+        url = typeof cachedUrl === 'string' ? JSON.parse(cachedUrl) : cachedUrl;
+      }
+    } catch (err) {
+      console.error('Redis GET error:', err);
+    }
   }
 
+  // 2. Find URL in DB if not in Cache
+  if (!url) {
+    url = await Url.findOne({
+      $or: [{ shortCode }, { customAlias: shortCode }],
+    }).lean();
+
+    if (!url) {
+      const error = new Error('URL not found');
+      error.statusCode = 404;
+      throw error;
+    }
+
+    // Set Cache
+    if (redisClient) {
+      try {
+        await redisClient.set(cacheKey, url, { ex: CACHE_TTL_SECONDS });
+      } catch (err) {
+        console.error('Redis SET error:', err);
+      }
+    }
+  }
+
+  // 3. Validate Status and Expiry
   if (!url.isActive) {
     const error = new Error('URL is inactive');
     error.statusCode = 400;
     throw error;
   }
 
-  // 2. Check Expiry
   if (url.expiryDate && new Date(url.expiryDate) < new Date()) {
     const error = new Error('URL has expired');
     error.statusCode = 400;
     throw error;
   }
 
-  // 3. Update click count
-  url.clickCount += 1;
-  await url.save();
+  // 4. Update click count asynchronously (non-blocking)
+  const newClickCount = (url.clickCount || 0) + 1;
+  Url.updateOne({ _id: url._id }, { $inc: { clickCount: 1 } }).exec().catch(console.error);
 
-  // 4. Record Visit (Asynchronously so it doesn't block redirection)
+  // 5. Record Visit (Asynchronously so it doesn't block redirection)
   recordVisit(url._id, req).catch(console.error);
 
   const referrer = req.headers.referer || req.headers.referrer || 'Direct';
 
-  // 5. Emit live stat event via Socket.IO
+  // 6. Emit live stat event via Socket.IO
   const io = req.app.get('io');
   if (io && url.userId) {
     io.to(url.userId.toString()).emit('linkClicked', {
       shortCode: url.shortCode,
-      clickCount: url.clickCount,
+      clickCount: newClickCount,
       timestamp: new Date().toISOString(),
       originalUrl: url.originalUrl,
       referrer: referrer

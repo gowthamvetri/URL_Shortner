@@ -2,6 +2,7 @@ import { nanoid  } from 'nanoid';
 import QRCode from 'qrcode';
 import dns from 'dns/promises';
 import Url from '../models/Url.js';
+import redisClient from '../config/redis.js';
 
 async function validateDomainExistence(urlString) {
   try {
@@ -148,6 +149,18 @@ const updateUrl = async (userId, urlId, updates) => {
   if (updates.isActive !== undefined) url.isActive = updates.isActive;
 
   await url.save();
+
+  if (redisClient) {
+    try {
+      await redisClient.del(`url:${url.shortCode}`);
+      if (url.customAlias) {
+        await redisClient.del(`url:${url.customAlias}`);
+      }
+    } catch (err) {
+      console.error('Redis cache invalidation error during update:', err);
+    }
+  }
+
   return url;
 };
 
@@ -158,6 +171,17 @@ const deleteUrl = async (userId, urlId) => {
     error.statusCode = 404;
     throw error;
   }
+  if (redisClient) {
+    try {
+      await redisClient.del(`url:${url.shortCode}`);
+      if (url.customAlias) {
+        await redisClient.del(`url:${url.customAlias}`);
+      }
+    } catch (err) {
+      console.error('Redis cache invalidation error during delete:', err);
+    }
+  }
+
   return true;
 };
 
