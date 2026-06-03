@@ -1,7 +1,6 @@
 import { Outlet, Navigate, useLocation } from 'react-router-dom';
 import { useContext } from 'react';
 import { AuthContext } from '../context/AuthContext';
-import { Loader2 } from 'lucide-react';
 
 import { FullPageLoader } from '../components/ui/FullPageLoader';
 
@@ -27,10 +26,10 @@ const AuthLayout = () => {
       <div className="absolute top-[-10%] left-[-10%] w-[500px] h-[500px] bg-secondary rounded-full mix-blend-multiply filter blur-[100px] opacity-70"></div>
       <div className="absolute bottom-[-10%] right-[-10%] w-[500px] h-[500px] bg-white rounded-full mix-blend-multiply filter blur-[100px] opacity-70"></div>
       
-      <div className="w-full max-w-md relative z-10">
-        <div className="text-center mb-8">
-          <h1 className="text-4xl md:text-5xl font-heading font-extrabold tracking-tight text-primary-foreground">VibrantLink</h1>
-          <p className="text-primary-foreground/80 font-bold mt-2">Manage your links with ease</p>
+      <div className="w-full max-w-5xl relative z-10 px-4 md:px-8">
+        <div className="text-center mb-10">
+          <h1 className="text-5xl md:text-6xl font-heading font-extrabold tracking-tight text-primary-foreground drop-shadow-sm">VibrantLink</h1>
+          <p className="text-primary-foreground/90 font-bold mt-3 text-lg md:text-xl drop-shadow-sm">Manage your links with ease</p>
         </div>
         <Outlet />
       </div>

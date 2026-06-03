@@ -11,5 +11,6 @@ router.post('/request-password-change-otp', requireAuth, authController.requestP
 router.post('/change-password', requireAuth, authController.changePassword);
 router.post('/verify-email', requireAuth, authController.verifyEmail);
 router.post('/resend-verification', requireAuth, authController.resendVerificationCode);
+router.put('/profile', requireAuth, authController.updateProfile);
 
 export default router;

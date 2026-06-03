@@ -9,6 +9,7 @@ import { FullPageLoader } from '../components/ui/FullPageLoader';
 import { Link, useLocation } from 'react-router-dom';
 import { format } from 'date-fns';
 import { useSocket } from '../hooks/useSocket';
+import { ArrowLeft, Search } from 'lucide-react';
 
 const COLORS = ['#2ecc71', '#F1C40F', '#000000', '#ba1a1a', '#e2e2e2'];
 
@@ -262,7 +263,7 @@ const Analytics = () => {
             <div className="p-0">
               <div className="relative w-full overflow-auto max-h-[500px]">
                 <table className="w-full caption-bottom text-sm">
-                  <thead className="[&_tr]:border-b-2 [&_tr]:border-black bg-accent/10 sticky top-0 z-10 shadow-sm">
+                  <thead className="[&_tr]:border-b-2 [&_tr]:border-black bg-accent sticky top-0 z-10 shadow-sm">
                     <tr className="border-b-2 border-black transition-colors hover:bg-muted/50">
                       <th className="h-14 px-6 text-left align-middle font-bold text-foreground">Time</th>
                       <th className="h-14 px-6 text-left align-middle font-bold text-foreground">IP Address</th>

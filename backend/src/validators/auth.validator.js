@@ -22,8 +22,14 @@ const changePasswordSchema = Joi.object({
     }),
 });
 
+const updateProfileSchema = Joi.object({
+  name: Joi.string().min(2).max(50).required(),
+  phoneNumber: Joi.string().allow('', null).optional()
+});
+
 export {
   registerSchema,
   loginSchema,
   changePasswordSchema,
+  updateProfileSchema,
 };

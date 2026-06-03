@@ -79,66 +79,96 @@ const Landing = () => {
     <div className="min-h-screen bg-background flex flex-col font-sans">
       
       {/* Header */}
-      <header className="px-4 lg:px-8 h-20 flex items-center border-b-2 border-black bg-white sticky top-0 z-50">
-        <Link to="/" className="flex items-center">
-          <div className="flex items-center gap-2">
-            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71" stroke="#25c073" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-              <path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71" stroke="#25c073" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-            </svg>
-            <span className="font-heading font-extrabold text-2xl tracking-tight text-foreground">VibrantLink</span>
+      <header className="px-4 lg:px-8 h-[88px] flex items-center border-b-2 border-black bg-white sticky top-0 z-50">
+        <div className="w-full max-w-7xl mx-auto flex items-center justify-between">
+          <Link to="/" className="flex items-center">
+            <div className="flex items-center gap-2 group">
+              <div className="w-10 h-10 bg-primary rounded-xl border-2 border-black flex items-center justify-center shadow-sm group-hover:shadow-hard group-hover:-translate-y-1 transition-all overflow-hidden">
+                <img className='z-20' src="../../public/final.png" alt="" />
+              </div>
+              <span className="font-heading font-extrabold text-2xl tracking-tight text-foreground ml-1">VibrantLink</span>
+            </div>
+          </Link>
+
+          <nav className="hidden md:flex items-center gap-8">
+            <a href="#" className="text-base font-bold text-foreground hover:text-primary transition-colors relative after:absolute after:-bottom-1 after:left-0 after:h-1 after:w-0 after:bg-primary after:transition-all hover:after:w-full">Home</a>
+            <a href="#features" className="text-base font-bold text-foreground hover:text-primary transition-colors relative after:absolute after:-bottom-1 after:left-0 after:h-1 after:w-0 after:bg-primary after:transition-all hover:after:w-full">Features</a>
+            <Link to="/contact" className="text-base font-bold text-foreground hover:text-primary transition-colors relative after:absolute after:-bottom-1 after:left-0 after:h-1 after:w-0 after:bg-primary after:transition-all hover:after:w-full">Contact Us</Link>
+          </nav>
+
+          <div className="hidden md:flex items-center gap-4">
+            <Link 
+              to="/login" 
+              className="text-base font-bold text-foreground hover:text-primary transition-colors px-2"
+            >
+              Sign In
+            </Link>
+            <Link 
+              to="/register" 
+              className="inline-flex items-center justify-center rounded-full text-sm font-bold transition-all hover:-translate-y-1 h-11 px-8 border-2 border-black shadow-hard hover:shadow-hard-lg bg-primary text-black"
+            >
+              Get Started
+            </Link>
           </div>
-        </Link>
-        <nav className="hidden md:flex ml-auto gap-8 items-center mr-8">
-          <a href="#" className="text-sm font-bold text-foreground hover:text-primary transition-colors">Home</a>
-          <Link to="/contact" className="text-sm font-bold text-foreground hover:text-primary transition-colors">Contact Us</Link>
-        </nav>
-        <Link 
-          to="/login" 
-          className="hidden md:inline-flex ml-auto md:ml-0 items-center justify-center rounded-full text-sm font-bold transition-all hover:-translate-y-1 h-10 px-6 border-2 border-black bg-primary text-black"
-        >
-          Sign In
-        </Link>
-        
-        {/* Mobile Menu Toggle */}
-        <button 
-          className="ml-auto md:hidden p-2 text-black hover:text-primary transition-colors focus:outline-none"
-          onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-        >
-          {isMobileMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
-        </button>
+          
+          {/* Mobile Menu Toggle */}
+          <button 
+            className="md:hidden w-11 h-11 bg-white border-2 border-black rounded-full flex items-center justify-center shadow-sm hover:shadow-hard hover:-translate-y-1 transition-all focus:outline-none"
+            onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+          >
+            {isMobileMenuOpen ? <X className="w-5 h-5 text-black" /> : <Menu className="w-5 h-5 text-black" />}
+          </button>
+        </div>
       </header>
 
       {/* Mobile Menu Dropdown */}
       <AnimatePresence>
         {isMobileMenuOpen && (
           <motion.div 
-            initial={{ opacity: 0, y: -20 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -20 }}
-            className="md:hidden absolute top-20 left-0 w-full bg-white border-b-2 border-black z-40 shadow-hard-lg"
+            initial={{ opacity: 0, y: -20, scale: 0.95 }}
+            animate={{ opacity: 1, y: 0, scale: 1 }}
+            exit={{ opacity: 0, y: -20, scale: 0.95 }}
+            transition={{ duration: 0.2 }}
+            className="md:hidden fixed top-[96px] left-4 right-4 bg-white border-2 border-black rounded-[24px] z-40 shadow-hard-lg overflow-hidden"
           >
-            <div className="flex flex-col p-4 space-y-4">
+            <div className="flex flex-col p-6 space-y-4">
               <a 
                 href="#" 
                 onClick={() => setIsMobileMenuOpen(false)}
-                className="text-lg font-bold text-foreground hover:text-primary transition-colors py-2 border-b-2 border-transparent hover:border-black"
+                className="text-lg font-bold text-foreground hover:bg-secondary/20 transition-colors p-3 rounded-xl"
               >
                 Home
+              </a>
+              <a 
+                href="#features" 
+                onClick={() => setIsMobileMenuOpen(false)}
+                className="text-lg font-bold text-foreground hover:bg-secondary/20 transition-colors p-3 rounded-xl"
+              >
+                Features
               </a>
               <Link 
                 to="/contact" 
                 onClick={() => setIsMobileMenuOpen(false)}
-                className="text-lg font-bold text-foreground hover:text-primary transition-colors py-2 border-b-2 border-transparent hover:border-black"
+                className="text-lg font-bold text-foreground hover:bg-secondary/20 transition-colors p-3 rounded-xl"
               >
                 Contact Us
               </Link>
+              
+              <div className="h-0.5 w-full bg-gray-100 my-2"></div>
+              
               <Link 
                 to="/login" 
                 onClick={() => setIsMobileMenuOpen(false)}
-                className="inline-flex items-center justify-center rounded-full text-sm font-bold h-12 px-6 border-2 border-black bg-primary text-black w-full"
+                className="inline-flex items-center justify-center rounded-xl text-base font-bold h-12 px-6 border-2 border-black bg-white text-black w-full"
               >
                 Sign In
+              </Link>
+              <Link 
+                to="/register" 
+                onClick={() => setIsMobileMenuOpen(false)}
+                className="inline-flex items-center justify-center rounded-xl text-base font-bold h-12 px-6 border-2 border-black bg-primary text-black w-full shadow-hard"
+              >
+                Get Started
               </Link>
             </div>
           </motion.div>

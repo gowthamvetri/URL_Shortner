@@ -26,6 +26,11 @@ export const authService = {
     return response.data;
   },
 
+  updateProfile: async (data) => {
+    const response = await api.put('/auth/profile', data);
+    return response.data;
+  },
+
   requestPasswordChangeOTP: async () => {
     const response = await api.post('/auth/request-password-change-otp');
     return response.data;

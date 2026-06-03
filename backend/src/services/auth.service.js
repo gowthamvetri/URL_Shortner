@@ -48,7 +48,8 @@ const registerUser = async (name, email, password) => {
       id: newUser._id,
       name: newUser.name,
       email: newUser.email,
-      isVerified: newUser.isVerified
+      isVerified: newUser.isVerified,
+      phoneNumber: newUser.phoneNumber
     },
     token,
   };
@@ -79,7 +80,8 @@ const loginUser = async (email, password) => {
       id: user._id,
       name: user.name,
       email: user.email,
-      isVerified: user.isVerified
+      isVerified: user.isVerified,
+      phoneNumber: user.phoneNumber
     },
     token,
   };
@@ -93,6 +95,29 @@ const getUserById = async (userId) => {
     throw error;
   }
   return user;
+};
+
+const updateProfile = async (userId, name, phoneNumber) => {
+  const user = await User.findById(userId);
+  if (!user) {
+    const error = new Error('User not found');
+    error.statusCode = 404;
+    throw error;
+  }
+
+  user.name = name;
+  user.phoneNumber = phoneNumber;
+  await user.save();
+
+  return {
+    user: {
+      id: user._id,
+      name: user.name,
+      email: user.email,
+      isVerified: user.isVerified,
+      phoneNumber: user.phoneNumber
+    }
+  };
 };
 
 const requestPasswordChangeOTP = async (userId) => {
@@ -236,5 +261,6 @@ export {
   changePassword,
   generateToken,
   verifyEmail,
-  resendVerificationCode
+  resendVerificationCode,
+  updateProfile
 };

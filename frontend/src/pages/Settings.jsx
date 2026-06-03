@@ -1,14 +1,47 @@
-import { useContext, useState } from 'react';
+import { useContext, useState, useEffect } from 'react';
 import { AuthContext } from '../context/AuthContext';
-import { User, Mail, Shield, Bell } from 'lucide-react';
+import { User, Mail, Shield, Bell, Phone, Globe, Loader2 } from 'lucide-react';
 import { ChangePasswordModal } from '../components/ChangePasswordModal';
 import toast from 'react-hot-toast';
 import { authService } from '../services/auth.service';
 
 const Settings = () => {
-  const { user } = useContext(AuthContext);
+  const { user, updateProfile } = useContext(AuthContext);
   const [isPasswordModalOpen, setIsPasswordModalOpen] = useState(false);
   const [isRequestingOtp, setIsRequestingOtp] = useState(false);
+  
+  const [formData, setFormData] = useState({
+    name: user?.name || '',
+    phoneNumber: user?.phoneNumber || ''
+  });
+  const [isUpdatingProfile, setIsUpdatingProfile] = useState(false);
+  const [ipData, setIpData] = useState(null);
+
+  useEffect(() => {
+    if (user) {
+      setFormData({
+        name: user.name || '',
+        phoneNumber: user.phoneNumber || ''
+      });
+    }
+  }, [user]);
+
+  useEffect(() => {
+    fetch('https://ipapi.co/json/')
+      .then(res => res.json())
+      .then(data => setIpData(data))
+      .catch(err => console.error('Failed to fetch IP', err));
+  }, []);
+
+  const handleProfileSubmit = async (e) => {
+    e.preventDefault();
+    setIsUpdatingProfile(true);
+    const success = await updateProfile(formData.name, formData.phoneNumber);
+    setIsUpdatingProfile(false);
+    if (success) {
+      toast.success('Profile updated successfully!');
+    }
+  };
 
   const handlePasswordChangeClick = async () => {
     setIsRequestingOtp(true);
@@ -51,15 +84,16 @@ const Settings = () => {
               </div>
             </div>
             
-            <div className="grid gap-6 md:grid-cols-2 pt-6 border-t-2 border-black">
+            <form onSubmit={handleProfileSubmit} className="grid gap-6 md:grid-cols-2 pt-6 border-t-2 border-black">
               <div className="space-y-2">
                 <label className="text-sm font-bold leading-none">Full Name</label>
                 <div className="flex relative">
                   <User className="absolute left-4 top-3.5 h-5 w-5 text-muted-foreground" />
                   <input
-                    disabled
-                    value={user?.name || ''}
-                    className="flex h-12 w-full rounded-2xl border-2 border-black bg-muted pl-12 pr-4 py-2 text-sm font-medium opacity-70 cursor-not-allowed"
+                    value={formData.name}
+                    onChange={(e) => setFormData({...formData, name: e.target.value})}
+                    required
+                    className="flex h-12 w-full rounded-2xl border-2 border-black bg-background pl-12 pr-4 py-2 text-sm font-medium focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-primary/20 transition-all"
                   />
                 </div>
               </div>
@@ -74,7 +108,58 @@ const Settings = () => {
                   />
                 </div>
               </div>
-            </div>
+              <div className="space-y-2">
+                <label className="text-sm font-bold leading-none">Phone Number</label>
+                <div className="flex relative">
+                  <Phone className="absolute left-4 top-3.5 h-5 w-5 text-muted-foreground" />
+                  <input
+                    value={formData.phoneNumber}
+                    onChange={(e) => setFormData({...formData, phoneNumber: e.target.value})}
+                    placeholder="Enter phone number"
+                    className="flex h-12 w-full rounded-2xl border-2 border-black bg-background pl-12 pr-4 py-2 text-sm font-medium focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-primary/20 transition-all"
+                  />
+                </div>
+              </div>
+              
+              <div className="md:col-span-2 flex justify-end">
+                 <button 
+                  type="submit"
+                  disabled={isUpdatingProfile}
+                  className="inline-flex items-center justify-center rounded-full text-sm font-bold transition-all hover:-translate-y-1 h-12 px-8 border-2 border-black shadow-hard hover:shadow-hard-lg bg-primary text-black focus-visible:outline-none disabled:opacity-50 disabled:pointer-events-none"
+                >
+                  {isUpdatingProfile ? <Loader2 className="mr-2 h-5 w-5 animate-spin" /> : 'Save Changes'}
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+
+        {/* Connection Info Section */}
+        <div className="rounded-xl border-2 border-black bg-card text-card-foreground shadow-hard-lg overflow-hidden">
+          <div className="flex flex-col space-y-1.5 p-6 border-b-2 border-black bg-accent/20">
+            <h3 className="font-heading font-extrabold text-xl leading-none tracking-tight">Current Connection Info</h3>
+            <p className="text-sm font-medium text-muted-foreground mt-1">Your current IP address and detected location.</p>
+          </div>
+          <div className="p-6">
+            {ipData ? (
+              <div className="grid gap-6 md:grid-cols-2">
+                <div className="space-y-1">
+                  <p className="text-sm font-bold text-muted-foreground">IP Address</p>
+                  <div className="flex items-center gap-2">
+                    <Globe className="w-5 h-5 text-primary" />
+                    <p className="text-lg font-bold">{ipData.ip}</p>
+                  </div>
+                </div>
+                <div className="space-y-1">
+                  <p className="text-sm font-bold text-muted-foreground">Location</p>
+                  <p className="text-lg font-bold">{ipData.city ? `${ipData.city}, ${ipData.country_name}` : 'Unknown'}</p>
+                </div>
+              </div>
+            ) : (
+              <div className="flex items-center text-muted-foreground font-medium">
+                <Loader2 className="w-5 h-5 animate-spin mr-2" /> Fetching connection info...
+              </div>
+            )}
           </div>
         </div>
 

@@ -1,5 +1,5 @@
 import * as authService from '../services/auth.service.js';
-import { registerSchema, loginSchema, changePasswordSchema } from '../validators/auth.validator.js';
+import { registerSchema, loginSchema, changePasswordSchema, updateProfileSchema } from '../validators/auth.validator.js';
 
 const register = async (req, res) => {
   try {
@@ -98,6 +98,23 @@ const resendVerificationCode = async (req, res) => {
   }
 };
 
+const updateProfile = async (req, res) => {
+  try {
+    const { error, value } = updateProfileSchema.validate(req.body);
+    if (error) {
+      return res.status(400).json({ error: error.details[0].message });
+    }
+
+    const { name, phoneNumber } = value;
+    const result = await authService.updateProfile(req.user.id, name, phoneNumber);
+
+    return res.status(200).json(result);
+  } catch (error) {
+    const statusCode = error.statusCode || 500;
+    return res.status(statusCode).json({ error: error.message || 'Internal server error' });
+  }
+};
+
 export {
   register,
   login,
@@ -105,5 +122,6 @@ export {
   requestPasswordChangeOTP,
   changePassword,
   verifyEmail,
-  resendVerificationCode
+  resendVerificationCode,
+  updateProfile
 };

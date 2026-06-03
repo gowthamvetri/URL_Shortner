@@ -37,14 +37,26 @@ const Register = () => {
   };
 
   return (
-    <div className="bg-card text-card-foreground p-8 rounded-[24px] border-2 border-black shadow-hard-lg">
-      <div className="flex flex-col items-center space-y-1.5 mb-6 text-center">
-        <img src="/final.png" alt="Logo" className="h-12 w-12 mb-2 object-contain border-2 border-black rounded-full" />
-        <h3 className="font-heading font-extrabold tracking-tight text-3xl">Create an account</h3>
-        <p className="text-sm font-medium text-muted-foreground">
-          Enter your details below to create your account.
-        </p>
-      </div>
+    <div className="bg-card text-card-foreground p-6 md:p-10 rounded-[32px] border-2 border-black shadow-hard-lg flex flex-col md:flex-row items-stretch gap-8 md:gap-12">
+      
+      {/* Left Side: Form */}
+      <div className="w-full md:w-1/2 flex flex-col justify-center">
+        {/* Mobile Header */}
+        <div className="flex flex-col items-center space-y-2 mb-8 text-center md:hidden">
+          <img src="/register_illustration.png" alt="Register" className="h-28 w-28 mb-2 object-contain" />
+          <h3 className="font-heading font-extrabold tracking-tight text-3xl">Create an account</h3>
+          <p className="text-sm font-bold text-muted-foreground">
+            Enter your details below to create your account.
+          </p>
+        </div>
+
+        {/* Desktop Header */}
+        <div className="hidden md:block mb-8">
+          <h3 className="font-heading font-extrabold tracking-tight text-4xl mb-2">Create an account</h3>
+          <p className="text-base font-bold text-muted-foreground">
+            Enter your details below to get started.
+          </p>
+        </div>
 
       {error && (
         <div className="mb-4 p-3 rounded-md bg-destructive/15 text-destructive text-sm font-medium">
@@ -144,12 +156,29 @@ const Register = () => {
         </button>
       </form>
       
-      <div className="mt-6 text-center text-sm">
+      <div className="mt-8 text-center text-base font-bold">
         <span className="text-muted-foreground">Already have an account? </span>
-        <Link to="/login" className="text-primary underline-offset-4 hover:underline font-medium">
+        <Link to="/login" className="text-primary underline-offset-4 hover:underline">
           Sign in
         </Link>
       </div>
+      </div>
+      
+      {/* Right Side: Image Banner */}
+      <div className="hidden md:flex flex-col items-center justify-center w-1/2 p-8 bg-primary/10 rounded-[24px] border-2 border-black relative overflow-hidden">
+        <div className="absolute bottom-0 right-0 w-32 h-32 bg-secondary/20 rounded-tl-full -mr-16 -mb-16 border-t-2 border-l-2 border-black"></div>
+        <div className="absolute top-0 left-0 w-24 h-24 bg-white/50 rounded-br-full -ml-12 -mt-12 border-b-2 border-r-2 border-black"></div>
+        
+        <img src="/register_illustration.png" alt="Get Started" className="w-full max-w-[280px] object-contain mb-8 relative z-10 drop-shadow-md hover:scale-105 transition-transform duration-500" />
+        
+        <div className="text-center relative z-10">
+          <h3 className="font-heading font-extrabold text-3xl mb-3 text-foreground">Join VibrantLink</h3>
+          <p className="font-bold text-muted-foreground text-base max-w-xs mx-auto">
+            Take full control of your short links and track your analytics seamlessly.
+          </p>
+        </div>
+      </div>
+      
     </div>
   );
 };

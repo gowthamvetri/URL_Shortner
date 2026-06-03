@@ -113,17 +113,48 @@ const VerifyEmail = () => {
   if (!user) return null;
 
   return (
-    <div className="bg-card text-card-foreground p-8 rounded-[24px] border-2 border-black shadow-hard-lg max-w-md w-full mx-auto">
-      <div className="flex flex-col items-center space-y-3 mb-6 text-center">
-        <div className="h-16 w-16 bg-primary/10 rounded-full border-2 border-black flex items-center justify-center mb-2">
-          <Mail className="h-8 w-8 text-primary" />
+    <div className="bg-card text-card-foreground p-6 md:p-10 rounded-[32px] border-2 border-black shadow-hard-lg flex flex-col md:flex-row items-stretch gap-8 md:gap-12 w-full max-w-4xl mx-auto">
+      
+      {/* Left Side: Image Banner */}
+      <div className="hidden md:flex flex-col items-center justify-center w-1/2 p-8 bg-[#F1C40F]/10 rounded-[24px] border-2 border-black relative overflow-hidden">
+        <div className="absolute top-0 left-0 w-32 h-32 bg-primary/20 rounded-br-full -ml-16 -mt-16 border-b-2 border-r-2 border-black"></div>
+        <div className="absolute bottom-0 right-0 w-24 h-24 bg-white/50 rounded-tl-full -mr-12 -mb-12 border-t-2 border-l-2 border-black"></div>
+        
+        <img src="/verify_illustration.png" alt="Verify Email" className="w-full max-w-[280px] object-contain mb-8 relative z-10 drop-shadow-md hover:scale-105 transition-transform duration-500" />
+        
+        <div className="text-center relative z-10">
+          <h3 className="font-heading font-extrabold text-3xl mb-3 text-foreground">Verify Your Account</h3>
+          <p className="font-bold text-muted-foreground text-base max-w-xs mx-auto">
+            You're just one step away from managing your vibrant links. Check your inbox!
+          </p>
         </div>
-        <h3 className="font-heading font-extrabold tracking-tight text-3xl">Check your email</h3>
-        <p className="text-sm font-medium text-muted-foreground">
-          We've sent a 6-digit verification code to<br/>
-          <strong className="text-foreground">{user.email}</strong>
-        </p>
       </div>
+
+      {/* Right Side: Form */}
+      <div className="w-full md:w-1/2 flex flex-col justify-center">
+        {/* Mobile Header */}
+        <div className="flex flex-col items-center space-y-2 mb-8 text-center md:hidden">
+          <img src="/verify_illustration.png" alt="Verify Email" className="h-28 w-28 mb-2 object-contain" />
+          <h3 className="font-heading font-extrabold tracking-tight text-3xl">Check your email</h3>
+          <p className="text-sm font-bold text-muted-foreground">
+            We've sent a 6-digit verification code to<br/>
+            <strong className="text-foreground">{user.email}</strong>
+          </p>
+        </div>
+
+        {/* Desktop Header */}
+        <div className="hidden md:block mb-8">
+          <div className="flex items-center gap-3 mb-2">
+             <div className="h-10 w-10 bg-primary/20 rounded-full border-2 border-black flex items-center justify-center">
+               <Mail className="h-5 w-5 text-foreground" />
+             </div>
+             <h3 className="font-heading font-extrabold tracking-tight text-4xl">Enter Code</h3>
+          </div>
+          <p className="text-base font-bold text-muted-foreground">
+            We've sent a 6-digit verification code to<br/>
+            <strong className="text-foreground">{user.email}</strong>
+          </p>
+        </div>
 
       {error && (
         <div className="mb-6 p-3 rounded-md bg-destructive/15 text-destructive text-sm font-medium text-center border border-destructive/30">
@@ -179,6 +210,7 @@ const VerifyEmail = () => {
           <LogOut className="h-4 w-4 mr-2" />
           Use a different account
         </button>
+      </div>
       </div>
     </div>
   );

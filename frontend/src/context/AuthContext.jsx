@@ -78,8 +78,20 @@ export const AuthProvider = ({ children }) => {
     }
   };
 
+  const updateProfile = async (name, phoneNumber) => {
+    setError(null);
+    try {
+      const data = await authService.updateProfile({ name, phoneNumber });
+      setUser(data.user);
+      return true;
+    } catch (err) {
+      setError(err.response?.data?.error || 'Failed to update profile');
+      return false;
+    }
+  };
+
   return (
-    <AuthContext.Provider value={{ user, loading, error, login, register, logout, verifyEmail, resendVerification, setError }}>
+    <AuthContext.Provider value={{ user, loading, error, login, register, logout, verifyEmail, resendVerification, updateProfile, setError }}>
       {children}
     </AuthContext.Provider>
   );
