@@ -159,15 +159,32 @@ const Dashboard = () => {
     }));
   };
 
+  const formatReferrerDomain = (urlStr) => {
+    if (!urlStr || urlStr.toLowerCase() === 'direct') return 'Direct';
+    try {
+      const withProtocol = urlStr.toLowerCase().startsWith('http') ? urlStr : `https://${urlStr}`;
+      const url = new URL(withProtocol);
+      let domain = url.hostname;
+      if (domain.startsWith('www.')) {
+        domain = domain.substring(4);
+      }
+      return domain.toLowerCase();
+    } catch (e) {
+      return urlStr;
+    }
+  };
+
   const getReferrerIcon = (name) => {
-    const initial = name.charAt(0).toUpperCase();
+    const domain = formatReferrerDomain(name);
+    const initial = domain.charAt(0).toUpperCase();
     let bg = 'bg-primary';
-    if (name.toLowerCase().includes('twitter') || name.toLowerCase().includes('x')) bg = 'bg-blue-500';
-    if (name.toLowerCase().includes('instagram') || name.toLowerCase().includes('ig')) bg = 'bg-pink-500';
-    if (name.toLowerCase().includes('direct')) bg = 'bg-gray-400';
+    if (domain.includes('twitter') || domain.includes('x.com')) bg = 'bg-blue-500';
+    if (domain.includes('instagram') || domain.includes('ig')) bg = 'bg-pink-500';
+    if (domain.includes('direct')) bg = 'bg-gray-400';
+    if (domain.includes('github')) bg = 'bg-gray-800';
     
     return (
-      <div className={`w-8 h-8 rounded-full border-2 border-black flex items-center justify-center text-white font-bold text-xs ${bg}`}>
+      <div className={`w-8 h-8 rounded-full border-2 border-black flex items-center justify-center text-white font-bold text-xs shrink-0 ${bg}`}>
         {initial}
       </div>
     );
@@ -182,12 +199,12 @@ const Dashboard = () => {
           <div>
             <div className="flex items-center gap-3 mb-2">
               <h2 className="text-3xl sm:text-4xl font-heading font-extrabold tracking-tight text-secondary-foreground">Dashboard</h2>
-              {isConnected && (
+              {/* {isConnected && (
                 <div className="flex items-center gap-1.5 px-2 py-1 bg-[#2ecc71]/20 border border-[#2ecc71] rounded-full" title="Live stats connected">
                   <div className="w-2 h-2 rounded-full bg-[#2ecc71] animate-pulse"></div>
                   <span className="text-[10px] font-bold text-[#27ae60] uppercase tracking-wider">Live</span>
                 </div>
-              )}
+              )} */}
             </div>
             <p className="text-secondary-foreground/80 font-medium">Your link performance at a glance.</p>
           </div>
@@ -208,14 +225,14 @@ const Dashboard = () => {
       ) : (
         <>
           {/* New Neo-Brutalist Analytics Section */}
-          <div className="grid gap-6 grid-cols-1 md:grid-cols-3">
+          <div className="grid gap-6 grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
             
             {/* Top Left: Featured Link */}
-            <div className="md:col-span-1 rounded-2xl border-2 border-black bg-card text-card-foreground shadow-hard-lg p-6 flex flex-col justify-between min-h-[220px]">
+            <div className="col-span-1 md:col-span-2 lg:col-span-1 rounded-2xl border-2 border-black bg-card text-card-foreground shadow-hard-lg p-6 flex flex-col justify-between min-h-[220px]">
               <div>
                 <div className="flex items-start justify-between mb-2">
                   <h3 className="font-heading font-extrabold text-2xl truncate max-w-[75%]">
-                    {globalAnalytics?.topUrl ? `vbrnt.link/${globalAnalytics.topUrl.shortCode}` : 'No Links Yet'}
+                    {globalAnalytics?.topUrl ? `vbrnt.link/${globalAnalytics.topUrl.customAlias || globalAnalytics.topUrl.shortCode}` : 'No Links Yet'}
                   </h3>
                   {globalAnalytics?.topUrl && (
                     <span className="px-3 py-1 bg-[#2ecc71] border-2 border-black rounded-full text-xs font-bold text-black">
@@ -230,7 +247,7 @@ const Dashboard = () => {
               
               <div className="flex gap-3 mb-6">
                 <button 
-                  onClick={() => globalAnalytics?.topUrl && copyToClipboard(globalAnalytics.topUrl.shortCode)}
+                  onClick={() => globalAnalytics?.topUrl && copyToClipboard(globalAnalytics.topUrl.customAlias || globalAnalytics.topUrl.shortCode)}
                   disabled={!globalAnalytics?.topUrl}
                   className="flex-1 bg-[#2ecc71] hover:bg-[#27ae60] text-black border-2 border-black rounded-full py-2 font-bold flex items-center justify-center transition-transform hover:-translate-y-1 shadow-sm disabled:opacity-50"
                 >
@@ -254,7 +271,7 @@ const Dashboard = () => {
             </div>
 
             {/* Top Right: Click Trend Chart */}
-            <div className="md:col-span-2 rounded-2xl border-2 border-black bg-white shadow-hard-lg p-6 min-h-[220px] flex flex-col">
+            <div className="col-span-1 md:col-span-2 lg:col-span-2 rounded-2xl border-2 border-black bg-white shadow-hard-lg p-6 min-h-[220px] flex flex-col">
               <div className="flex justify-between items-center mb-6 border-b-2 border-black pb-4">
                 <h3 className="font-heading font-extrabold text-2xl">Click Trend</h3>
                 <div className="px-4 py-1.5 border-2 border-black rounded-full text-sm font-bold bg-white">
@@ -278,7 +295,7 @@ const Dashboard = () => {
             </div>
 
             {/* Bottom Left: Total Clicks */}
-            <div className="md:col-span-1 rounded-2xl border-2 border-black bg-[#2ecc71] text-black shadow-hard-lg p-6 relative overflow-hidden min-h-[200px] flex flex-col justify-center">
+            <div className="col-span-1 md:col-span-1 lg:col-span-1 rounded-2xl border-2 border-black bg-[#2ecc71] text-black shadow-hard-lg p-6 relative overflow-hidden min-h-[200px] flex flex-col justify-center">
               <div className="absolute -right-8 -bottom-8 w-32 h-32 border-[20px] border-black/10 rounded-full"></div>
               <h3 className="font-bold text-sm tracking-wider uppercase mb-2">Total Clicks</h3>
               <div className="font-heading font-extrabold text-6xl md:text-7xl mb-4 relative z-10">
@@ -296,7 +313,7 @@ const Dashboard = () => {
             </div>
 
             {/* Bottom Middle: Top Locations */}
-            <div className="md:col-span-1 rounded-2xl border-2 border-black bg-white shadow-hard-lg p-6">
+            <div className="col-span-1 md:col-span-1 lg:col-span-1 rounded-2xl border-2 border-black bg-white shadow-hard-lg p-6">
               <h3 className="font-heading font-extrabold text-xl mb-6">Top Locations</h3>
               <div className="space-y-4">
                 {globalAnalytics?.charts?.country?.length > 0 ? (
@@ -318,15 +335,17 @@ const Dashboard = () => {
             </div>
 
             {/* Bottom Right: Referrers */}
-            <div className="md:col-span-1 rounded-2xl border-2 border-black bg-white shadow-hard-lg p-6">
+            <div className="col-span-1 md:col-span-2 lg:col-span-1 rounded-2xl border-2 border-black bg-white shadow-hard-lg p-6">
               <h3 className="font-heading font-extrabold text-xl mb-6">Referrers</h3>
               <div className="space-y-4">
                 {globalAnalytics?.charts?.referrer?.length > 0 ? (
                   globalAnalytics.charts.referrer.slice(0,3).map((ref, idx) => (
                     <div key={idx} className="flex items-center justify-between">
-                      <div className="flex items-center gap-3">
+                      <div className="flex items-center gap-3 overflow-hidden">
                         {getReferrerIcon(ref.name || 'Direct')}
-                        <span className="font-bold text-sm text-gray-700 capitalize">{ref.name || 'Direct'}</span>
+                        <span className="font-bold text-sm text-gray-700 truncate" title={ref.name}>
+                          {formatReferrerDomain(ref.name || 'Direct')}
+                        </span>
                       </div>
                       <span className="px-3 py-1 border-2 border-black rounded-md font-bold text-sm">
                         {formatNumber(ref.count)}

@@ -116,12 +116,12 @@ const Analytics = () => {
           <div>
             <div className="flex items-center gap-3 mb-2">
               <h2 className="text-3xl sm:text-4xl font-heading font-extrabold tracking-tight text-secondary-foreground">Analytics</h2>
-              {isConnected && (
+              {/* {isConnected && (
                 <div className="flex items-center gap-1.5 px-2 py-1 bg-[#2ecc71]/20 border border-[#2ecc71] rounded-full" title="Live stats connected">
                   <div className="w-2 h-2 rounded-full bg-[#2ecc71] animate-pulse"></div>
                   <span className="text-[10px] font-bold text-[#27ae60] uppercase tracking-wider">Live</span>
                 </div>
-              )}
+              )} */}
             </div>
             <p className="text-secondary-foreground/80 font-medium break-all">{analytics?.url?.originalUrl}</p>
           </div>
@@ -143,7 +143,7 @@ const Analytics = () => {
       {analytics && (
         <div className="grid gap-6 md:grid-cols-2">
           {/* Stats Overview */}
-          <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-4">
+          <div className="grid gap-6 grid-cols-1 sm:grid-cols-2 md:col-span-2">
             <div className="rounded-xl border-2 border-black bg-card text-card-foreground shadow-hard hover:-translate-y-1 transition-transform">
               <div className="p-6 flex flex-row items-center justify-between space-y-0 pb-2">
                 <h3 className="tracking-tight text-sm font-bold">Total Clicks</h3>
@@ -185,26 +185,28 @@ const Analytics = () => {
             <div className="p-6 border-b-2 border-black bg-accent/20">
               <h3 className="font-heading font-extrabold text-xl leading-none tracking-tight">Operating Systems</h3>
             </div>
-            <div className="p-6 h-[280px]">
-              <ResponsiveContainer width="100%" height="100%">
-                <PieChart>
-                  <Pie
-                    data={analytics.charts.os}
-                    cx="50%"
-                    cy="50%"
-                    innerRadius={60}
-                    outerRadius={90}
-                    paddingAngle={5}
-                    dataKey="count"
-                  >
-                    {analytics.charts.os.map((entry, index) => (
-                      <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} stroke="#000" strokeWidth={2} />
-                    ))}
-                  </Pie>
-                  <RechartsTooltip />
-                </PieChart>
-              </ResponsiveContainer>
-              <div className="flex flex-wrap justify-center gap-4 mt-2">
+            <div className="p-6 flex flex-col">
+              <div className="h-[250px] w-full">
+                <ResponsiveContainer width="100%" height="100%">
+                  <PieChart>
+                    <Pie
+                      data={analytics.charts.os}
+                      cx="50%"
+                      cy="50%"
+                      innerRadius={60}
+                      outerRadius={90}
+                      paddingAngle={5}
+                      dataKey="count"
+                    >
+                      {analytics.charts.os.map((entry, index) => (
+                        <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} stroke="#000" strokeWidth={2} />
+                      ))}
+                    </Pie>
+                    <RechartsTooltip />
+                  </PieChart>
+                </ResponsiveContainer>
+              </div>
+              <div className="flex flex-wrap justify-center gap-4 mt-4">
                 {analytics.charts.os.map((entry, index) => (
                   <div key={entry.name} className="flex items-center text-sm font-bold">
                     <span className="w-3 h-3 rounded-full mr-2 border border-black" style={{ backgroundColor: COLORS[index % COLORS.length] }}></span>

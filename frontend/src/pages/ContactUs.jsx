@@ -1,7 +1,10 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
+import { Menu, X } from 'lucide-react';
+import { motion, AnimatePresence } from 'framer-motion';
 
 const ContactUs = () => {
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   return (
     <div className="min-h-screen bg-background flex flex-col font-sans">
       
@@ -22,11 +25,55 @@ const ContactUs = () => {
         </nav>
         <Link 
           to="/login" 
-          className="ml-auto md:ml-0 inline-flex items-center justify-center rounded-full text-sm font-bold transition-all hover:-translate-y-1 h-10 px-6 border-2 border-black bg-primary text-black"
+          className="hidden md:inline-flex ml-auto md:ml-0 items-center justify-center rounded-full text-sm font-bold transition-all hover:-translate-y-1 h-10 px-6 border-2 border-black bg-primary text-black"
         >
           Sign In
         </Link>
+        
+        {/* Mobile Menu Toggle */}
+        <button 
+          className="ml-auto md:hidden p-2 text-black hover:text-primary transition-colors focus:outline-none"
+          onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+        >
+          {isMobileMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
+        </button>
       </header>
+
+      {/* Mobile Menu Dropdown */}
+      <AnimatePresence>
+        {isMobileMenuOpen && (
+          <motion.div 
+            initial={{ opacity: 0, y: -20 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -20 }}
+            className="md:hidden absolute top-20 left-0 w-full bg-white border-b-2 border-black z-40 shadow-hard-lg"
+          >
+            <div className="flex flex-col p-4 space-y-4">
+              <Link 
+                to="/" 
+                onClick={() => setIsMobileMenuOpen(false)}
+                className="text-lg font-bold text-foreground hover:text-primary transition-colors py-2 border-b-2 border-transparent hover:border-black"
+              >
+                Home
+              </Link>
+              <Link 
+                to="/contact" 
+                onClick={() => setIsMobileMenuOpen(false)}
+                className="text-lg font-bold text-foreground hover:text-primary transition-colors py-2 border-b-2 border-transparent hover:border-black"
+              >
+                Contact Us
+              </Link>
+              <Link 
+                to="/login" 
+                onClick={() => setIsMobileMenuOpen(false)}
+                className="inline-flex items-center justify-center rounded-full text-sm font-bold h-12 px-6 border-2 border-black bg-primary text-black w-full"
+              >
+                Sign In
+              </Link>
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
 
       <main className="flex-1 relative bg-[#fafafa]">
         <section className="w-full py-24 flex flex-col items-center">
@@ -36,7 +83,7 @@ const ContactUs = () => {
               <p className="text-xl text-gray-600">Have a question? We'd love to hear from you.</p>
             </div>
             
-            <form className="p-8 md:p-12 border-2 border-black rounded-3xl shadow-hard-lg bg-white space-y-6">
+            <form className="p-6 md:p-12 border-2 border-black rounded-3xl shadow-hard-lg bg-white space-y-6">
               <div className="space-y-2">
                 <label className="block text-sm font-bold text-gray-900">Name</label>
                 <input type="text" className="w-full border-2 border-black rounded-xl px-5 py-4 outline-none focus:ring-4 focus:ring-primary/20 transition-all text-sm font-medium" placeholder="John Doe" />

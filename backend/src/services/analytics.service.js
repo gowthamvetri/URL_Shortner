@@ -174,6 +174,8 @@ const getGlobalAnalytics = async (userId) => {
     topUrl: topUrl ? {
       originalUrl: topUrl.originalUrl,
       shortCode: topUrl.shortCode,
+      customAlias: topUrl.customAlias,
+      qrCode: topUrl.qrCode,
       isActive: topUrl.isActive,
     } : null,
     summary: {

@@ -9,7 +9,9 @@ import {
   Shield, 
   CheckCircle,
   ChevronDown,
-  Star
+  Star,
+  Menu,
+  X
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 
@@ -46,6 +48,7 @@ const FAQItem = ({ question, answer }) => {
 
 const Landing = () => {
   const navigate = useNavigate();
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   return (
     <div className="min-h-screen bg-background flex flex-col font-sans">
       
@@ -66,11 +69,55 @@ const Landing = () => {
         </nav>
         <Link 
           to="/login" 
-          className="ml-auto md:ml-0 inline-flex items-center justify-center rounded-full text-sm font-bold transition-all hover:-translate-y-1 h-10 px-6 border-2 border-black bg-primary text-black"
+          className="hidden md:inline-flex ml-auto md:ml-0 items-center justify-center rounded-full text-sm font-bold transition-all hover:-translate-y-1 h-10 px-6 border-2 border-black bg-primary text-black"
         >
           Sign In
         </Link>
+        
+        {/* Mobile Menu Toggle */}
+        <button 
+          className="ml-auto md:hidden p-2 text-black hover:text-primary transition-colors focus:outline-none"
+          onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+        >
+          {isMobileMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
+        </button>
       </header>
+
+      {/* Mobile Menu Dropdown */}
+      <AnimatePresence>
+        {isMobileMenuOpen && (
+          <motion.div 
+            initial={{ opacity: 0, y: -20 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -20 }}
+            className="md:hidden absolute top-20 left-0 w-full bg-white border-b-2 border-black z-40 shadow-hard-lg"
+          >
+            <div className="flex flex-col p-4 space-y-4">
+              <a 
+                href="#" 
+                onClick={() => setIsMobileMenuOpen(false)}
+                className="text-lg font-bold text-foreground hover:text-primary transition-colors py-2 border-b-2 border-transparent hover:border-black"
+              >
+                Home
+              </a>
+              <Link 
+                to="/contact" 
+                onClick={() => setIsMobileMenuOpen(false)}
+                className="text-lg font-bold text-foreground hover:text-primary transition-colors py-2 border-b-2 border-transparent hover:border-black"
+              >
+                Contact Us
+              </Link>
+              <Link 
+                to="/login" 
+                onClick={() => setIsMobileMenuOpen(false)}
+                className="inline-flex items-center justify-center rounded-full text-sm font-bold h-12 px-6 border-2 border-black bg-primary text-black w-full"
+              >
+                Sign In
+              </Link>
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
 
       <main className="flex-1 relative">
         
@@ -91,11 +138,11 @@ const Landing = () => {
                 </p>
 
                 {/* Input box */}
-                <div className="mt-4 flex flex-col sm:flex-row items-center bg-white border-2 border-black rounded-[100px] p-2 max-w-xl w-full shadow-hard-lg">
+                <div className="mt-4 flex flex-col sm:flex-row items-center bg-white border-2 border-black rounded-3xl sm:rounded-[100px] p-2 max-w-xl w-full shadow-hard-lg">
                   <input 
                     type="text" 
                     placeholder="Paste your long link here..." 
-                    className="flex-1 bg-transparent px-6 py-3 outline-none font-medium text-black placeholder:text-gray-400 w-full sm:w-auto text-[15px]"
+                    className="flex-1 bg-transparent px-4 sm:px-6 py-3 outline-none font-medium text-black placeholder:text-gray-400 w-full sm:w-auto text-[15px]"
                   />
                   <button className="inline-flex items-center justify-center rounded-full text-sm font-bold h-12 px-8 border-2 border-black bg-primary text-black whitespace-nowrap mt-2 sm:mt-0 w-full sm:w-auto shadow-sm hover:bg-[#1fa964] transition-colors" onClick={()=>navigate("/register")}>
                     Shorten <span className="ml-2">→</span>
@@ -221,9 +268,6 @@ const Landing = () => {
                   We've built more than just a shortener. VibrantLink is a comprehensive link management ecosystem designed for modern marketers.
                 </p>
               </div>
-              <a href="#integrations" className="inline-flex items-center justify-center rounded-full text-sm font-bold transition-transform hover:-translate-y-1 h-12 px-8 border-2 border-black bg-white text-black shadow-hard shrink-0">
-                Explore Integrations
-              </a>
             </div>
             
             <div className="grid md:grid-cols-3 gap-8">
@@ -380,12 +424,6 @@ const Landing = () => {
                     >
                       Get Started Now
                     </Link>
-                    <a 
-                      href="#pricing"
-                      className="inline-flex h-14 items-center justify-center rounded-full bg-white text-[#111827] px-8 font-bold text-[15px] border-2 border-black shadow-hard hover:-translate-y-1 transition-transform"
-                    >
-                      View Pricing
-                    </a>
                   </div>
                 </div>
               </div>
