@@ -84,7 +84,7 @@ const Landing = () => {
           <Link to="/" className="flex items-center">
             <div className="flex items-center gap-2 group">
               <div className="w-10 h-10 bg-primary rounded-xl border-2 border-black flex items-center justify-center shadow-sm group-hover:shadow-hard group-hover:-translate-y-1 transition-all overflow-hidden">
-                <img className='z-20' src="../../public/final.png" alt="" />
+                <img className='z-20' src="/logo.png" alt="" />
               </div>
               <span className="font-heading font-extrabold text-2xl tracking-tight text-foreground ml-1">VibrantLink</span>
             </div>

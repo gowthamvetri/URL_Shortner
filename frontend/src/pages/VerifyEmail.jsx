@@ -185,7 +185,7 @@ const VerifyEmail = () => {
           disabled={isSubmitting || code.some(d => d === '')}
           className="inline-flex items-center justify-center rounded-full text-sm font-bold transition-all hover:-translate-y-1 h-12 px-6 py-2 border-2 border-black shadow-hard hover:shadow-hard-lg bg-primary text-primary-foreground focus-visible:outline-none disabled:opacity-50 disabled:pointer-events-none w-full"
         >
-          {isSubmitting ? <Loader2 className="mr-2 h-5 w-5 animate-spin" /> : 'Verify Account'}
+          {isSubmitting ? <img src="/Sandy Loading.svg" className="mr-2 h-5 w-5" alt="Loading..." /> : 'Verify Account'}
         </button>
       </form>
       
@@ -196,11 +196,14 @@ const VerifyEmail = () => {
           className="inline-flex items-center text-muted-foreground hover:text-foreground disabled:opacity-50 disabled:hover:text-muted-foreground transition-colors"
         >
           {isResending ? (
-            <Loader2 className="h-4 w-4 mr-2 animate-spin" />
+            <>
+              <img src="/Sandy Loading.svg" className="h-4 w-4 mr-2" alt="Loading..." />
+              Resending...
+            </>
           ) : (
             <RefreshCw className={`h-4 w-4 mr-2 ${cooldown === 0 ? 'text-primary' : ''}`} />
           )}
-          {cooldown > 0 ? `Resend code in ${cooldown}s` : 'Resend Code'}
+          {cooldown > 0 ? `Resend code in ${cooldown}s` : !isResending && 'Resend Code'}
         </button>
         
         <button 

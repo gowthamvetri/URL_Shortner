@@ -113,22 +113,11 @@ const Analytics = () => {
         {/* Organic Blob Background */}
         <div className="absolute -right-10 -bottom-10 w-48 h-48 bg-white/30 rounded-full blur-2xl"></div>
 
-        <Link 
-          to="/urls" 
-          className="relative z-10 inline-flex items-center justify-center rounded-full h-12 w-12 border-2 border-black bg-white hover:-translate-y-1 hover:shadow-hard transition-all focus:outline-none"
-        >
-          <ArrowLeft className="h-5 w-5" />
-        </Link>
+        <img src="/analytics_illustration.png" alt="Analytics" className="relative z-10 w-24 h-24 object-contain" />
         <div className="relative z-10 flex items-center gap-4">
           <div>
             <div className="flex items-center gap-3 mb-2">
               <h2 className="text-3xl sm:text-4xl font-heading font-extrabold tracking-tight text-secondary-foreground">Analytics</h2>
-              {/* {isConnected && (
-                <div className="flex items-center gap-1.5 px-2 py-1 bg-[#2ecc71]/20 border border-[#2ecc71] rounded-full" title="Live stats connected">
-                  <div className="w-2 h-2 rounded-full bg-[#2ecc71] animate-pulse"></div>
-                  <span className="text-[10px] font-bold text-[#27ae60] uppercase tracking-wider">Live</span>
-                </div>
-              )} */}
             </div>
             <p className="text-secondary-foreground/80 font-medium break-all">{analytics?.url?.originalUrl}</p>
           </div>

@@ -115,7 +115,7 @@ export const CreateUrlModal = ({ isOpen, onClose, onSuccess }) => {
             disabled={loading}
             className="inline-flex items-center justify-center rounded-full text-sm font-bold transition-all hover:-translate-y-1 h-12 px-6 py-2 border-2 border-black shadow-hard hover:shadow-hard-lg bg-primary text-primary-foreground focus-visible:outline-none disabled:opacity-50 disabled:pointer-events-none"
           >
-            {loading ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : 'Create Link'}
+            {loading ? <img src="/Sandy Loading.svg" className="mr-2 h-4 w-4" alt="Loading..." /> : 'Create Link'}
           </button>
         </div>
       </form>

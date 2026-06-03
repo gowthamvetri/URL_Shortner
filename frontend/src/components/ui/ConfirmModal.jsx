@@ -26,7 +26,7 @@ export const ConfirmModal = ({ isOpen, onClose, onConfirm, title, message, confi
               : 'bg-primary text-primary-foreground'
           }`}
         >
-          {loading ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : confirmText}
+          {loading ? <img src="/Sandy Loading.svg" className="mr-2 h-4 w-4" alt="Loading..." /> : confirmText}
         </button>
       </div>
     </Modal>

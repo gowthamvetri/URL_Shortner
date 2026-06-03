@@ -15,6 +15,7 @@ import {
 } from 'recharts';
 import { useSocket } from '../hooks/useSocket';
 import { FullPageLoader } from '../components/ui/FullPageLoader';
+import toast from 'react-hot-toast';
 
 const COLORS = ['#e2e2e2', '#e2e2e2', '#e2e2e2', '#F1C40F', '#e2e2e2', '#2ecc71', '#e2e2e2'];
 
@@ -122,6 +123,7 @@ const Dashboard = () => {
   const copyToClipboard = (shortCode) => {
     const url = `${import.meta.env.VITE_API_URL ? import.meta.env.VITE_API_URL.replace('/api', '') : 'http://localhost:5000'}/${shortCode}`;
     navigator.clipboard.writeText(url);
+    toast.success('Link copied to clipboard!');
   };
 
   const handleDeleteConfirm = async () => {
@@ -196,7 +198,8 @@ const Dashboard = () => {
       {/* Overview Header */}
       <div className="relative flex flex-col sm:flex-row items-center justify-between gap-4 p-8 bg-secondary rounded-xl border-2 border-black shadow-hard-lg overflow-hidden">
         <div className="absolute -right-10 -top-10 w-48 h-48 bg-white/20 rounded-full blur-2xl"></div>
-        <div className="relative z-10 flex items-center gap-4">
+        <div className="relative z-10 flex items-center gap-6">
+          <img src="/dashboard_illustration.png" alt="Dashboard" className="relative z-10 w-24 h-24 object-contain hidden sm:block drop-shadow-md" />
           <div>
             <div className="flex items-center gap-3 mb-2">
               <h2 className="text-3xl sm:text-4xl font-heading font-extrabold tracking-tight text-secondary-foreground">Dashboard</h2>

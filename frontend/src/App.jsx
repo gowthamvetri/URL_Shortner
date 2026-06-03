@@ -7,6 +7,7 @@ import Landing from './pages/Landing';
 import ContactUs from './pages/ContactUs';
 import Dashboard from './pages/Dashboard';
 import Urls from './pages/Urls';
+import BulkUpload from './pages/BulkUpload';
 import Analytics from './pages/Analytics';
 import Settings from './pages/Settings';
 import Login from './pages/Login';
@@ -46,6 +47,7 @@ function App() {
             <Route element={<DashboardLayout />}>
               <Route path="/dashboard" element={<Dashboard />} />
               <Route path="/urls" element={<Urls />} />
+              <Route path="/bulk-upload" element={<BulkUpload />} />
               <Route path="/analytics" element={<Analytics />} />
               <Route path="/settings" element={<Settings />} />
             </Route>

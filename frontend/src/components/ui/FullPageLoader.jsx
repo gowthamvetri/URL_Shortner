@@ -7,7 +7,7 @@ export const FullPageLoader = ({ fullScreen = true }) => {
       <div className="flex flex-col items-center max-w-sm w-full px-6">
         {/* Animated Image */}
         <motion.img 
-          src="/final.png" 
+          src="/Sandy Loading.svg" 
           alt="Loading..." 
           className="w-32 h-32 object-contain mb-8"
           animate={{ y: [0, -10, 0] }}

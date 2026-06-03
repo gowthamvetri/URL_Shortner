@@ -58,12 +58,15 @@ const Settings = () => {
   };
 
   return (
-    <div className="space-y-6 max-w-4xl relative">
-      <div className="relative z-10 p-8 bg-secondary rounded-xl border-2 border-black shadow-hard-lg overflow-hidden">
+    <div className="space-y-8 relative">
+      <div className="relative z-10 p-8 bg-primary rounded-xl border-2 border-black shadow-hard-lg overflow-hidden flex flex-col sm:flex-row items-center sm:items-start gap-6">
         {/* Organic Blob Background */}
         <div className="absolute -left-10 -top-10 w-48 h-48 bg-white/30 rounded-full blur-2xl pointer-events-none"></div>
-        <h2 className="text-3xl sm:text-4xl font-heading font-extrabold tracking-tight text-secondary-foreground mb-2 relative z-10">Settings</h2>
-        <p className="text-secondary-foreground/80 font-medium relative z-10">Manage your account settings and preferences.</p>
+        <img src="/settings_illustration.png" alt="Settings" className="relative z-10 w-24 h-24 object-contain hidden sm:block drop-shadow-md" />
+        <div className="relative z-10 flex-1">
+          <h2 className="text-3xl sm:text-4xl font-heading font-extrabold tracking-tight text-secondary-foreground mb-2">Settings</h2>
+          <p className="text-secondary-foreground/80 font-medium">Manage your account settings and preferences.</p>
+        </div>
       </div>
 
       <div className="grid gap-6">
@@ -127,7 +130,7 @@ const Settings = () => {
                   disabled={isUpdatingProfile}
                   className="inline-flex items-center justify-center rounded-full text-sm font-bold transition-all hover:-translate-y-1 h-12 px-8 border-2 border-black shadow-hard hover:shadow-hard-lg bg-primary text-black focus-visible:outline-none disabled:opacity-50 disabled:pointer-events-none"
                 >
-                  {isUpdatingProfile ? <Loader2 className="mr-2 h-5 w-5 animate-spin" /> : 'Save Changes'}
+                  {isUpdatingProfile ? <img src="/Sandy Loading.svg" className="mr-2 h-5 w-5" alt="Loading..." /> : 'Save Changes'}
                 </button>
               </div>
             </form>
@@ -157,7 +160,7 @@ const Settings = () => {
               </div>
             ) : (
               <div className="flex items-center text-muted-foreground font-medium">
-                <Loader2 className="w-5 h-5 animate-spin mr-2" /> Fetching connection info...
+                <img src="/Sandy Loading.svg" className="w-5 h-5 mr-2" alt="Loading..." /> Fetching connection info...
               </div>
             )}
           </div>

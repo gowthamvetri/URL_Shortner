@@ -9,7 +9,6 @@ import { CreateUrlModal } from '../components/CreateUrlModal';
 import { EditUrlModal } from '../components/EditUrlModal';
 import { QRCodeModal } from '../components/QRCodeModal';
 import { ConfirmModal } from '../components/ui/ConfirmModal';
-import { BulkUploadModal } from '../components/BulkUploadModal';
 
 const Urls = () => {
   const [data, setData] = useState({ urls: [], totalCount: 0, totalPages: 1 });
@@ -17,7 +16,6 @@ const Urls = () => {
   const [search, setSearch] = useState('');
   const [page, setPage] = useState(1);
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [isBulkModalOpen, setIsBulkModalOpen] = useState(false);
   const [selectedUrlForQr, setSelectedUrlForQr] = useState(null);
   const [selectedUrlForEdit, setSelectedUrlForEdit] = useState(null);
   const [selectedUrlForDelete, setSelectedUrlForDelete] = useState(null);
@@ -82,17 +80,14 @@ const Urls = () => {
         {/* Organic Blob Background */}
         <div className="absolute -left-10 -top-10 w-48 h-48 bg-white/20 rounded-full blur-2xl"></div>
 
-        <div className="relative z-10">
-          <h2 className="text-3xl sm:text-4xl font-heading font-extrabold tracking-tight text-primary-foreground mb-2">My Links</h2>
-          <p className="text-primary-foreground/80 font-medium">Manage and monitor all your shortened URLs.</p>
+        <div className="relative z-10 flex items-center gap-6">
+          <img src="/urls_illustration.png" alt="My Links" className="relative z-10 w-24 h-24 object-contain hidden sm:block drop-shadow-md" />
+          <div>
+            <h2 className="text-3xl sm:text-4xl font-heading font-extrabold tracking-tight text-primary-foreground mb-2">My Links</h2>
+            <p className="text-primary-foreground/80 font-medium">Manage and monitor all your shortened URLs.</p>
+          </div>
         </div>
         <div className="relative z-10 flex flex-col sm:flex-row items-center gap-3">
-          <button 
-            onClick={() => setIsBulkModalOpen(true)}
-            className="w-full sm:w-auto inline-flex items-center justify-center rounded-full text-sm font-bold transition-all hover:-translate-y-1 h-12 px-6 py-2 border-2 border-black shadow-hard hover:shadow-hard-lg bg-white text-foreground focus-visible:outline-none disabled:opacity-50 disabled:pointer-events-none"
-          >
-            Bulk Upload
-          </button>
           <button 
             onClick={() => setIsModalOpen(true)}
             className="w-full sm:w-auto inline-flex items-center justify-center rounded-full text-sm font-bold transition-all hover:-translate-y-1 h-12 px-6 py-2 border-2 border-black shadow-hard hover:shadow-hard-lg bg-secondary text-secondary-foreground focus-visible:outline-none disabled:opacity-50 disabled:pointer-events-none"
@@ -258,14 +253,6 @@ const Urls = () => {
         isOpen={isModalOpen} 
         onClose={() => setIsModalOpen(false)} 
         onSuccess={handleUrlCreated} 
-      />
-
-      <BulkUploadModal 
-        isOpen={isBulkModalOpen} 
-        onClose={() => setIsBulkModalOpen(false)} 
-        onSuccess={() => {
-          fetchUrls();
-        }} 
       />
 
       <EditUrlModal 
