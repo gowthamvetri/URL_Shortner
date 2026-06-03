@@ -8,6 +8,7 @@ import {
 import { Loader2, Search, ArrowLeft } from 'lucide-react';
 import { Link, useLocation } from 'react-router-dom';
 import { format } from 'date-fns';
+import { useSocket } from '../hooks/useSocket';
 
 const COLORS = ['#2ecc71', '#F1C40F', '#000000', '#ba1a1a', '#e2e2e2'];
 
@@ -19,6 +20,8 @@ const Analytics = () => {
   const [error, setError] = useState(null);
   const [filterText, setFilterText] = useState('');
   const location = useLocation();
+  
+  const { socket, isConnected } = useSocket();
 
   useEffect(() => {
     const fetchUrls = async () => {
@@ -56,6 +59,26 @@ const Analytics = () => {
     }
   }, [selectedUrlId]);
 
+  useEffect(() => {
+    if (!socket || !selectedUrlId) return;
+
+    const handleLinkClicked = (eventData) => {
+      const currentUrl = urls.find(u => u._id === selectedUrlId);
+      if (currentUrl && currentUrl.shortCode === eventData.shortCode) {
+        // Soft refresh the detailed analytics to pull in new geo/device/log data
+        console.log('Live click received for current URL, refreshing detailed analytics...');
+        analyticsService.getUrlAnalytics(selectedUrlId)
+          .then(data => setAnalytics(data))
+          .catch(err => console.error('Live update failed:', err));
+      }
+    };
+
+    socket.on('linkClicked', handleLinkClicked);
+    return () => {
+      socket.off('linkClicked', handleLinkClicked);
+    };
+  }, [socket, selectedUrlId, urls]);
+
   if (loading && !analytics) {
     return (
       <div className="flex h-full items-center justify-center">
@@ -89,9 +112,19 @@ const Analytics = () => {
         >
           <ArrowLeft className="h-5 w-5" />
         </Link>
-        <div className="relative z-10">
-          <h2 className="text-3xl sm:text-4xl font-heading font-extrabold tracking-tight text-secondary-foreground mb-2">Analytics</h2>
-          <p className="text-secondary-foreground/80 font-medium break-all">{analytics?.url?.originalUrl}</p>
+        <div className="relative z-10 flex items-center gap-4">
+          <div>
+            <div className="flex items-center gap-3 mb-2">
+              <h2 className="text-3xl sm:text-4xl font-heading font-extrabold tracking-tight text-secondary-foreground">Analytics</h2>
+              {isConnected && (
+                <div className="flex items-center gap-1.5 px-2 py-1 bg-[#2ecc71]/20 border border-[#2ecc71] rounded-full" title="Live stats connected">
+                  <div className="w-2 h-2 rounded-full bg-[#2ecc71] animate-pulse"></div>
+                  <span className="text-[10px] font-bold text-[#27ae60] uppercase tracking-wider">Live</span>
+                </div>
+              )}
+            </div>
+            <p className="text-secondary-foreground/80 font-medium break-all">{analytics?.url?.originalUrl}</p>
+          </div>
         </div>
       </div>
 

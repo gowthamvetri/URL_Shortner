@@ -12,6 +12,7 @@ import {
   Star
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { PricingSection } from '../components/landing/PricingSection';
 
 const FAQItem = ({ question, answer }) => {
   const [isOpen, setIsOpen] = useState(false);
@@ -61,9 +62,8 @@ const Landing = () => {
           </div>
         </Link>
         <nav className="hidden md:flex ml-auto gap-8 items-center mr-8">
-          <Link to="/" className="text-sm font-bold text-foreground hover:text-primary transition-colors">Home</Link>
-          <Link to="/features" className="text-sm font-bold text-foreground hover:text-primary transition-colors">Features</Link>
-          <Link to="/pricing" className="text-sm font-bold text-foreground hover:text-primary transition-colors">Pricing</Link>
+          <a href="#" className="text-sm font-bold text-foreground hover:text-primary transition-colors">Home</a>
+          <Link to="/contact" className="text-sm font-bold text-foreground hover:text-primary transition-colors">Contact Us</Link>
         </nav>
         <Link 
           to="/login" 
@@ -212,7 +212,7 @@ const Landing = () => {
         </section>
 
         {/* Features Section */}
-        <section className="w-full py-24 bg-[#f4f7f6] flex flex-col items-center">
+        <section id="features" className="w-full py-24 bg-[#f4f7f6] flex flex-col items-center">
           <div className="container px-4 md:px-6">
             
             <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-12 gap-6">
@@ -222,9 +222,9 @@ const Landing = () => {
                   We've built more than just a shortener. VibrantLink is a comprehensive link management ecosystem designed for modern marketers.
                 </p>
               </div>
-              <Link to="/features" className="inline-flex items-center justify-center rounded-full text-sm font-bold transition-transform hover:-translate-y-1 h-12 px-8 border-2 border-black bg-white text-black shadow-hard shrink-0">
-                Explore All Features
-              </Link>
+              <a href="#integrations" className="inline-flex items-center justify-center rounded-full text-sm font-bold transition-transform hover:-translate-y-1 h-12 px-8 border-2 border-black bg-white text-black shadow-hard shrink-0">
+                Explore Integrations
+              </a>
             </div>
             
             <div className="grid md:grid-cols-3 gap-8">
@@ -357,6 +357,9 @@ const Landing = () => {
           </div>
         </section>
 
+        {/* <CompanySection /> */}
+        {/* <LegalSection /> */}
+
         {/* Huge Yellow CTA Banner */}
         <section className="w-full py-24 bg-white relative overflow-hidden flex justify-center">
            <div className="container px-4 md:px-6 w-full max-w-6xl">
@@ -378,25 +381,22 @@ const Landing = () => {
                     >
                       Get Started Now
                     </Link>
-                    <Link 
-                      to="/pricing"
+                    <a 
+                      href="#pricing"
                       className="inline-flex h-14 items-center justify-center rounded-full bg-white text-[#111827] px-8 font-bold text-[15px] border-2 border-black shadow-hard hover:-translate-y-1 transition-transform"
                     >
                       View Pricing
-                    </Link>
+                    </a>
                   </div>
                 </div>
               </div>
            </div>
         </section>
-
       </main>
 
       {/* Footer */}
       <footer className="bg-[#18181b] text-white pt-16 pb-8 border-t-2 border-black flex flex-col items-center">
-        <div className="container px-4 md:px-6 grid grid-cols-1 md:grid-cols-4 gap-12 mb-12">
-          
-          <div className="md:col-span-2">
+        <div className="container px-4 md:px-6 flex flex-col items-center mb-12">
             <Link to="/" className="flex items-center gap-2 mb-4">
               <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                 <path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71" stroke="#25c073" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
@@ -404,41 +404,18 @@ const Landing = () => {
               </svg>
               <span className="font-heading font-extrabold text-2xl tracking-tight text-white">VibrantLink</span>
             </Link>
-            <p className="text-gray-400 font-medium max-w-xs text-sm leading-relaxed">
+            <p className="text-gray-400 font-medium text-sm leading-relaxed text-center max-w-sm mb-6">
               Making the web more accessible, one short link at a time. Built for creators, teams, and enterprises.
             </p>
-          </div>
-
-          <div>
-            <h4 className="font-bold text-primary mb-4 text-xs tracking-widest uppercase">Product</h4>
-            <ul className="space-y-3">
-              <li><Link to="/features" className="text-gray-300 hover:text-white text-sm font-medium transition-colors">Features</Link></li>
-              <li><Link to="/integrations" className="text-gray-300 hover:text-white text-sm font-medium transition-colors">Integrations</Link></li>
-              <li><Link to="/pricing" className="text-gray-300 hover:text-white text-sm font-medium transition-colors">Pricing</Link></li>
-              <li><Link to="/enterprise" className="text-gray-300 hover:text-white text-sm font-medium transition-colors">Enterprise</Link></li>
-            </ul>
-          </div>
-
-          <div>
-            <h4 className="font-bold text-primary mb-4 text-xs tracking-widest uppercase">Company</h4>
-            <ul className="space-y-3">
-              <li><Link to="/about" className="text-gray-300 hover:text-white text-sm font-medium transition-colors">About Us</Link></li>
-              <li><Link to="/careers" className="text-gray-300 hover:text-white text-sm font-medium transition-colors">Careers</Link></li>
-              <li><Link to="/blog" className="text-gray-300 hover:text-white text-sm font-medium transition-colors">Blog</Link></li>
-              <li><Link to="/contact" className="text-gray-300 hover:text-white text-sm font-medium transition-colors">Contact</Link></li>
-            </ul>
-          </div>
-          
+            <Link to="/contact" className="text-primary hover:text-white font-bold transition-colors">
+              Contact Us
+            </Link>
         </div>
         
-        <div className="container px-4 md:px-6 pt-8 border-t border-gray-800 flex flex-col md:flex-row items-center justify-between gap-4">
+        <div className="container px-4 md:px-6 pt-8 border-t border-gray-800 flex justify-center text-center">
           <p className="text-xs text-gray-500 font-medium">
             © {new Date().getFullYear()} VibrantLink Inc. All rights reserved.
           </p>
-          <div className="flex items-center gap-6">
-            <Link to="/privacy" className="text-xs text-gray-500 hover:text-white font-medium transition-colors">Privacy Policy</Link>
-            <Link to="/terms" className="text-xs text-gray-500 hover:text-white font-medium transition-colors">Terms of Service</Link>
-          </div>
         </div>
       </footer>
     </div>

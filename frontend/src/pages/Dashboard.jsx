@@ -13,6 +13,7 @@ import { ConfirmModal } from '../components/ui/ConfirmModal';
 import { 
   BarChart, Bar, XAxis, YAxis, Tooltip as RechartsTooltip, ResponsiveContainer, Cell, CartesianGrid
 } from 'recharts';
+import { useSocket } from '../hooks/useSocket';
 
 const COLORS = ['#e2e2e2', '#e2e2e2', '#e2e2e2', '#F1C40F', '#e2e2e2', '#2ecc71', '#e2e2e2'];
 
@@ -27,10 +28,65 @@ const Dashboard = () => {
   const [selectedUrlForEdit, setSelectedUrlForEdit] = useState(null);
   const [selectedUrlForDelete, setSelectedUrlForDelete] = useState(null);
   const [isDeleting, setIsDeleting] = useState(false);
+  
+  const { socket, isConnected } = useSocket();
 
   useEffect(() => {
     fetchDashboardData();
   }, []);
+
+  useEffect(() => {
+    if (!socket) return;
+
+    const handleLinkClicked = (eventData) => {
+      console.log('Live link click received:', eventData);
+      
+      // Update recent links table
+      setData(prevData => {
+        const newUrls = prevData.urls.map(url => {
+          if (url.shortCode === eventData.shortCode) {
+            return { ...url, clickCount: eventData.clickCount };
+          }
+          return url;
+        });
+        return { ...prevData, urls: newUrls };
+      });
+
+      // Update global analytics cards and charts
+      setGlobalAnalytics(prev => {
+        if (!prev) return prev;
+        
+        const newAnalytics = { ...prev };
+        
+        if (newAnalytics.summary) {
+          newAnalytics.summary.totalClicks += 1;
+        }
+
+        if (newAnalytics.topUrl && newAnalytics.topUrl.shortCode === eventData.shortCode) {
+          newAnalytics.topUrl.clickCount = eventData.clickCount;
+        }
+
+        if (newAnalytics.charts && newAnalytics.charts.timeline) {
+          const lastIndex = newAnalytics.charts.timeline.length - 1;
+          if (lastIndex >= 0) {
+            const lastItem = newAnalytics.charts.timeline[lastIndex];
+            newAnalytics.charts.timeline[lastIndex] = {
+              ...lastItem,
+              clicks: lastItem.clicks + 1
+            };
+          }
+        }
+
+        return newAnalytics;
+      });
+    };
+
+    socket.on('linkClicked', handleLinkClicked);
+
+    return () => {
+      socket.off('linkClicked', handleLinkClicked);
+    };
+  }, [socket]);
 
   const fetchDashboardData = async () => {
     setLoading(true);
@@ -108,9 +164,19 @@ const Dashboard = () => {
       {/* Overview Header */}
       <div className="relative flex flex-col sm:flex-row items-center justify-between gap-4 p-8 bg-secondary rounded-xl border-2 border-black shadow-hard-lg overflow-hidden">
         <div className="absolute -right-10 -top-10 w-48 h-48 bg-white/20 rounded-full blur-2xl"></div>
-        <div className="relative z-10">
-          <h2 className="text-3xl sm:text-4xl font-heading font-extrabold tracking-tight text-secondary-foreground mb-2">Dashboard</h2>
-          <p className="text-secondary-foreground/80 font-medium">Your link performance at a glance.</p>
+        <div className="relative z-10 flex items-center gap-4">
+          <div>
+            <div className="flex items-center gap-3 mb-2">
+              <h2 className="text-3xl sm:text-4xl font-heading font-extrabold tracking-tight text-secondary-foreground">Dashboard</h2>
+              {isConnected && (
+                <div className="flex items-center gap-1.5 px-2 py-1 bg-[#2ecc71]/20 border border-[#2ecc71] rounded-full" title="Live stats connected">
+                  <div className="w-2 h-2 rounded-full bg-[#2ecc71] animate-pulse"></div>
+                  <span className="text-[10px] font-bold text-[#27ae60] uppercase tracking-wider">Live</span>
+                </div>
+              )}
+            </div>
+            <p className="text-secondary-foreground/80 font-medium">Your link performance at a glance.</p>
+          </div>
         </div>
         <button 
           onClick={() => setIsModalOpen(true)}

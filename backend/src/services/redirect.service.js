@@ -35,6 +35,17 @@ const processRedirect = async (shortCode, req) => {
   // 4. Record Visit (Asynchronously so it doesn't block redirection)
   recordVisit(url._id, req).catch(console.error);
 
+  // 5. Emit live stat event via Socket.IO
+  const io = req.app.get('io');
+  if (io && url.userId) {
+    io.to(url.userId.toString()).emit('linkClicked', {
+      shortCode: url.shortCode,
+      clickCount: url.clickCount,
+      timestamp: new Date().toISOString(),
+      originalUrl: url.originalUrl
+    });
+  }
+
   return url.originalUrl;
 };
 
