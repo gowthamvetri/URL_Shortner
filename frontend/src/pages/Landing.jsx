@@ -12,7 +12,6 @@ import {
   Star
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { PricingSection } from '../components/landing/PricingSection';
 
 const FAQItem = ({ question, answer }) => {
   const [isOpen, setIsOpen] = useState(false);
