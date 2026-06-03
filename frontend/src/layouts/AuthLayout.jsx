@@ -21,7 +21,7 @@ const AuthLayout = () => {
   }
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-primary p-4 relative overflow-hidden">
+    <div className="min-h-screen flex items-center justify-center p-4 relative overflow-hidden">
       {/* Background blobs */}
       <div className="absolute top-[-10%] left-[-10%] w-[500px] h-[500px] bg-secondary rounded-full mix-blend-multiply filter blur-[100px] opacity-70"></div>
       <div className="absolute bottom-[-10%] right-[-10%] w-[500px] h-[500px] bg-white rounded-full mix-blend-multiply filter blur-[100px] opacity-70"></div>
