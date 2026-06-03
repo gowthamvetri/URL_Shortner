@@ -49,6 +49,32 @@ const FAQItem = ({ question, answer }) => {
 const Landing = () => {
   const navigate = useNavigate();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [activeFeatureIndex, setActiveFeatureIndex] = useState(0);
+
+  const features = [
+    {
+      title: "Instant Analytics",
+      desc: "Detailed reports on geolocation, device type, and referral sources updated every second.",
+      image: "/analytics_feature.png",
+      points: ["Real-time tracking", "Actionable campaigns"]
+    },
+    {
+      title: "Branded Links",
+      desc: "Replace our domain with yours to increase click-through rates by up to 34% with trust.",
+      image: "/branded_links_feature.png",
+      points: ["Custom domains", "SSL certification included"]
+    },
+    {
+      title: "Secure Management",
+      desc: "Protect your links with passwords, expiration dates, and advanced anti-spam filters.",
+      image: "/secure_management_feature.png",
+      points: ["Access control", "Spam protection"]
+    }
+  ];
+
+  const nextFeature = () => setActiveFeatureIndex((prev) => (prev + 1) % features.length);
+  const prevFeature = () => setActiveFeatureIndex((prev) => (prev - 1 + features.length) % features.length);
+
   return (
     <div className="min-h-screen bg-background flex flex-col font-sans">
       
@@ -148,18 +174,6 @@ const Landing = () => {
                     Shorten <span className="ml-2">→</span>
                   </button>
                 </div>
-
-                {/* Social Proof */}
-                <div className="flex items-center gap-4 mt-6">
-                  <div className="flex -space-x-3">
-                    <img className="w-8 h-8 rounded-full border-2 border-white" src="https://i.pravatar.cc/100?img=1" alt="User" />
-                    <img className="w-8 h-8 rounded-full border-2 border-white" src="https://i.pravatar.cc/100?img=2" alt="User" />
-                    <img className="w-8 h-8 rounded-full border-2 border-white" src="https://i.pravatar.cc/100?img=3" alt="User" />
-                  </div>
-                  <p className="text-xs font-bold text-gray-500 uppercase tracking-widest">
-                    Trusted by 2,000+ early adopters
-                  </p>
-                </div>
               </div>
 
               {/* Right Art */}
@@ -171,30 +185,6 @@ const Landing = () => {
                 <div className="relative z-10 w-full max-w-[580px] rounded-[32px] overflow-hidden flex items-center justify-center border-0">
                   <img src="/hero_browser_illustration.png" alt="Analytics Dashboard 3D" className="w-full h-full object-contain" onError={(e) => { e.target.src = 'https://images.unsplash.com/photo-1551288049-bebda4e38f71?auto=format&fit=crop&q=80&w=800'; }} />
                 </div>
-              </div>
-
-            </div>
-          </div>
-        </section>
-
-        {/* Stats Section (Dark) */}
-        <section className="w-full py-8 bg-[#18181b] border-y-2 border-black">
-          <div className="container px-4 md:px-6">
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-8 text-center divide-y md:divide-y-0 md:divide-x border-gray-700">
-              
-              <div className="flex flex-row items-center justify-center gap-3 py-2">
-                <span className="text-3xl font-extrabold text-secondary tracking-tight">99k+</span>
-                <span className="text-[10px] font-bold text-gray-400 tracking-[0.15em] uppercase text-left leading-tight">Satisfied<br/>Customers</span>
-              </div>
-              
-              <div className="flex flex-row items-center justify-center gap-3 py-2">
-                <span className="text-3xl font-extrabold text-primary tracking-tight">10k+</span>
-                <span className="text-[10px] font-bold text-gray-400 tracking-[0.15em] uppercase text-left leading-tight">Supreme<br/>Assets</span>
-              </div>
-              
-              <div className="flex flex-row items-center justify-center gap-3 py-2">
-                <span className="text-3xl font-extrabold text-secondary tracking-tight">25M+</span>
-                <span className="text-[10px] font-bold text-gray-400 tracking-[0.15em] uppercase text-left leading-tight">Links<br/>Shortened</span>
               </div>
 
             </div>
@@ -260,118 +250,77 @@ const Landing = () => {
         {/* Features Section */}
         <section id="features" className="w-full py-24 bg-[#f4f7f6] flex flex-col items-center">
           <div className="container px-4 md:px-6">
-            
-            <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-12 gap-6">
-              <div className="max-w-2xl text-left">
-                <h2 className="text-4xl font-heading font-extrabold tracking-tight mb-4">Packed with Power</h2>
-                <p className="text-gray-500 font-medium text-lg leading-relaxed">
-                  We've built more than just a shortener. VibrantLink is a comprehensive link management ecosystem designed for modern marketers.
-                </p>
-              </div>
-            </div>
-            
-            <div className="grid md:grid-cols-3 gap-8">
-              
-              {/* Feature 1 */}
-              <div className="bg-white border-2 border-black rounded-[24px] p-6 shadow-hard-lg flex flex-col h-full">
-                <div className="w-full h-40 bg-[#fdfaf0] rounded-[16px] border-2 border-black flex items-center justify-center mb-6">
-                  <BarChart3 className="w-12 h-12 text-[#e5c158]" strokeWidth={1.5} />
+            <h1 className='text-center text-3xl font-bold mb-10'>What Makes VibrantLink Stand Out</h1>
+            <div className="relative w-full max-w-4xl mx-auto mt-4">
+              <div className="bg-white border-2 border-black rounded-[32px] p-8 md:p-12 shadow-hard-lg overflow-hidden flex flex-col md:flex-row gap-12 items-center min-h-[450px]">
+                
+                <div className="w-full md:w-1/2 flex-shrink-0 flex items-center justify-center">
+                  <AnimatePresence mode="wait">
+                    <motion.img 
+                      key={activeFeatureIndex}
+                      src={features[activeFeatureIndex].image}
+                      initial={{ opacity: 0, x: -20 }}
+                      animate={{ opacity: 1, x: 0 }}
+                      exit={{ opacity: 0, x: 20 }}
+                      transition={{ duration: 0.3 }}
+                      className="w-full h-auto rounded-[16px] border-2 border-black object-cover shadow-sm max-h-[250px]"
+                      alt={features[activeFeatureIndex].title}
+                    />
+                  </AnimatePresence>
                 </div>
-                <h3 className="text-xl font-bold mb-3">Instant Analytics</h3>
-                <p className="text-gray-500 font-medium text-[15px] leading-relaxed mb-6">
-                  Detailed reports on geolocation, device type, and referral sources updated every second.
-                </p>
-                <div className="mt-auto space-y-3">
-                  <div className="flex items-center gap-2 text-sm font-bold text-gray-700">
-                    <CheckCircle className="w-4 h-4 text-primary" /> Real-time tracking
-                  </div>
-                  <div className="flex items-center gap-2 text-sm font-bold text-gray-700">
-                    <CheckCircle className="w-4 h-4 text-primary" /> Actionable campaigns
-                  </div>
-                </div>
-              </div>
 
-              {/* Feature 2 */}
-              <div className="bg-white border-2 border-black rounded-[24px] p-6 shadow-hard-lg flex flex-col h-full">
-                <div className="w-full h-40 bg-[#f0f9f4] rounded-[16px] border-2 border-black flex items-center justify-center mb-6">
-                  <MonitorSmartphone className="w-12 h-12 text-[#7bc99d]" strokeWidth={1.5} />
-                </div>
-                <h3 className="text-xl font-bold mb-3">Branded Links</h3>
-                <p className="text-gray-500 font-medium text-[15px] leading-relaxed mb-6">
-                  Replace our domain with yours to increase click-through rates by up to 34% with trust.
-                </p>
-                <div className="mt-auto space-y-3">
-                  <div className="flex items-center gap-2 text-sm font-bold text-gray-700">
-                    <CheckCircle className="w-4 h-4 text-primary" /> Custom domains
-                  </div>
-                  <div className="flex items-center gap-2 text-sm font-bold text-gray-700">
-                    <CheckCircle className="w-4 h-4 text-primary" /> SSL certification included
-                  </div>
+                <div className="w-full md:w-1/2 flex flex-col items-start justify-center h-full">
+                  <AnimatePresence mode="wait">
+                    <motion.div
+                      key={activeFeatureIndex}
+                      initial={{ opacity: 0, y: 10 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      exit={{ opacity: 0, y: -10 }}
+                      transition={{ duration: 0.3 }}
+                      className="flex flex-col"
+                    >
+                      <h3 className="text-3xl font-extrabold mb-4 font-heading tracking-tight text-[#111827]">{features[activeFeatureIndex].title}</h3>
+                      <p className="text-gray-500 font-medium text-base leading-relaxed mb-8">
+                        {features[activeFeatureIndex].desc}
+                      </p>
+                      
+                      <div className="space-y-4">
+                        {features[activeFeatureIndex].points.map((point, i) => (
+                          <div key={i} className="flex items-center gap-3 text-sm font-bold text-gray-700">
+                            <CheckCircle className="w-5 h-5 text-primary" /> {point}
+                          </div>
+                        ))}
+                      </div>
+                    </motion.div>
+                  </AnimatePresence>
                 </div>
               </div>
 
-              {/* Feature 3 */}
-              <div className="bg-white border-2 border-black rounded-[24px] p-6 shadow-hard-lg flex flex-col h-full">
-                <div className="w-full h-40 bg-[#fdfaf0] rounded-[16px] border-2 border-black flex items-center justify-center mb-6">
-                  <Shield className="w-12 h-12 text-[#e5c158]" strokeWidth={1.5} />
+              {/* Carousel Controls */}
+              <div className="flex items-center justify-center mt-8 gap-6">
+                <button 
+                  onClick={prevFeature}
+                  className="w-12 h-12 rounded-full border-2 border-black bg-white flex items-center justify-center shadow-hard hover:shadow-hard-lg hover:-translate-y-1 transition-all focus:outline-none"
+                >
+                  <span className="sr-only">Previous</span>
+                  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="m15 18-6-6 6-6"/></svg>
+                </button>
+                <div className="flex gap-2">
+                  {features.map((_, i) => (
+                    <button 
+                      key={i}
+                      onClick={() => setActiveFeatureIndex(i)}
+                      className={`w-3 h-3 rounded-full border-2 border-black transition-colors ${activeFeatureIndex === i ? 'bg-primary' : 'bg-gray-200'}`}
+                    />
+                  ))}
                 </div>
-                <h3 className="text-xl font-bold mb-3">Secure Management</h3>
-                <p className="text-gray-500 font-medium text-[15px] leading-relaxed mb-6">
-                  Protect your links with passwords, expiration dates, and advanced anti-spam filters.
-                </p>
-                <div className="mt-auto space-y-3">
-                  <div className="flex items-center gap-2 text-sm font-bold text-gray-700">
-                    <CheckCircle className="w-4 h-4 text-primary" /> Password protection
-                  </div>
-                  <div className="flex items-center gap-2 text-sm font-bold text-gray-700">
-                    <CheckCircle className="w-4 h-4 text-primary" /> Smart link redirection
-                  </div>
-                </div>
-              </div>
-
-            </div>
-          </div>
-        </section>
-
-        {/* Testimonials */}
-        <section className="w-full py-24 bg-white  flex flex-col items-center">
-          <div className="container px-4 md:px-6 flex flex-col items-center">
-            <h2 className="text-4xl font-heading font-extrabold tracking-tight text-center mb-16">Loved by the Community</h2>
-            
-            <div className="grid md:grid-cols-2 gap-8 w-full max-w-5xl">
-              
-              {/* Light Card */}
-              <div className="bg-white border-2 border-black rounded-3xl p-8 md:p-10 shadow-hard-lg flex flex-col">
-                <div className="flex gap-1 mb-6">
-                  {[1,2,3,4,5].map(i => <Star key={i} className="w-5 h-5 fill-secondary text-secondary" />)}
-                </div>
-                <p className="text-xl font-bold italic text-gray-800 mb-8 leading-snug flex-1">
-                  "VibrantLink has completely changed how we share our internal resources. The branded links alone have doubled our employee engagement on announcements."
-                </p>
-                <div className="flex items-center gap-4">
-                  <img src="https://i.pravatar.cc/150?img=47" alt="Sarah Jenkins" className="w-12 h-12 rounded-full border-2 border-black" />
-                  <div>
-                    <h4 className="font-bold text-sm text-black">Sarah Jenkins</h4>
-                    <p className="text-xs text-gray-500 font-bold">Marketing Director at TechFlow</p>
-                  </div>
-                </div>
-              </div>
-
-              {/* Dark Card */}
-              <div className="bg-[#18181b] border-2 border-[#18181b] rounded-3xl p-8 md:p-10 shadow-hard-lg flex flex-col">
-                <div className="flex gap-1 mb-6">
-                  {[1,2,3,4,5].map(i => <Star key={i} className="w-5 h-5 fill-primary text-primary" />)}
-                </div>
-                <p className="text-xl font-bold italic text-white mb-8 leading-snug flex-1">
-                  "The analytics are terrifyingly good. I can see exactly when my campaigns hit the peak and adjust my strategy in real-time. Unbeatable tool for growth."
-                </p>
-                <div className="flex items-center gap-4">
-                  <img src="https://i.pravatar.cc/150?img=11" alt="Marcus Kane" className="w-12 h-12 rounded-full border-2 border-primary" />
-                  <div>
-                    <h4 className="font-bold text-sm text-primary">Marcus Kane</h4>
-                    <p className="text-xs text-gray-400 font-bold">Founder of Creative Pulse</p>
-                  </div>
-                </div>
+                <button 
+                  onClick={nextFeature}
+                  className="w-12 h-12 rounded-full border-2 border-black bg-white flex items-center justify-center shadow-hard hover:shadow-hard-lg hover:-translate-y-1 transition-all focus:outline-none"
+                >
+                  <span className="sr-only">Next</span>
+                  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="m9 18 6-6-6-6"/></svg>
+                </button>
               </div>
 
             </div>
