@@ -4,6 +4,7 @@ import { Copy, Edit, Trash2, ExternalLink, Plus, Search, Loader2, QrCode, BarCha
 import { format } from 'date-fns';
 import { useNavigate } from 'react-router-dom';
 import toast from 'react-hot-toast';
+import { FullPageLoader } from '../components/ui/FullPageLoader';
 import { CreateUrlModal } from '../components/CreateUrlModal';
 import { EditUrlModal } from '../components/EditUrlModal';
 import { QRCodeModal } from '../components/QRCodeModal';
@@ -121,9 +122,7 @@ const Urls = () => {
 
         <div className="p-0">
           {loading && data.urls.length === 0 ? (
-            <div className="flex items-center justify-center py-8">
-              <Loader2 className="h-8 w-8 animate-spin text-muted-foreground" />
-            </div>
+            <FullPageLoader fullScreen={false} />
           ) : (
             <div className="relative w-full overflow-auto">
               <table className="w-full caption-bottom text-sm">
@@ -203,8 +202,26 @@ const Urls = () => {
                   ))}
                   {data.urls.length === 0 && !loading && (
                     <tr>
-                      <td colSpan={6} className="p-8 text-center text-muted-foreground font-medium">
-                        No links found matching your criteria.
+                      <td colSpan={6} className="p-12 text-center text-muted-foreground">
+                        <div className="flex flex-col items-center justify-center max-w-md mx-auto">
+                          <img 
+                            src="/empty_state_illustration.png" 
+                            alt="No links found" 
+                            className="w-32 h-32 object-contain mb-6 grayscale hover:grayscale-0 transition-all duration-300"
+                          />
+                          <h3 className="text-xl font-bold font-heading text-foreground mb-2">It's pretty quiet here...</h3>
+                          <p className="font-medium text-sm mb-6 text-muted-foreground">
+                            You don't have any links matching this criteria yet. 
+                            Create a new link to get started!
+                          </p>
+                          <button 
+                            onClick={() => setIsModalOpen(true)}
+                            className="inline-flex items-center justify-center rounded-full text-sm font-bold transition-all hover:-translate-y-1 h-10 px-6 border-2 border-black shadow-hard hover:shadow-hard-lg bg-primary text-primary-foreground focus-visible:outline-none"
+                          >
+                            <Plus className="mr-2 h-4 w-4" />
+                            Create Link
+                          </button>
+                        </div>
                       </td>
                     </tr>
                   )}

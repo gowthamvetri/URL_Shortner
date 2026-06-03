@@ -3,15 +3,13 @@ import { Navigate, Outlet } from 'react-router-dom';
 import { AuthContext } from '../context/AuthContext';
 import { Loader2 } from 'lucide-react';
 
+import { FullPageLoader } from '../components/ui/FullPageLoader';
+
 const ProtectedRoute = () => {
   const { user, loading } = useContext(AuthContext);
 
   if (loading) {
-    return (
-      <div className="flex min-h-screen items-center justify-center bg-background">
-        <Loader2 className="h-8 w-8 animate-spin text-primary" />
-      </div>
-    );
+    return <FullPageLoader />;
   }
 
   if (!user) {

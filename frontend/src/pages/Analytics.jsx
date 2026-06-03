@@ -5,7 +5,7 @@ import {
   BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip as RechartsTooltip, ResponsiveContainer, 
   LineChart, Line, PieChart, Pie, Cell 
 } from 'recharts';
-import { Loader2, Search, ArrowLeft } from 'lucide-react';
+import { FullPageLoader } from '../components/ui/FullPageLoader';
 import { Link, useLocation } from 'react-router-dom';
 import { format } from 'date-fns';
 import { useSocket } from '../hooks/useSocket';
@@ -80,19 +80,25 @@ const Analytics = () => {
   }, [socket, selectedUrlId, urls]);
 
   if (loading && !analytics) {
-    return (
-      <div className="flex h-full items-center justify-center">
-        <Loader2 className="h-8 w-8 animate-spin text-primary" />
-      </div>
-    );
+    return <FullPageLoader fullScreen={false} />;
   }
 
   if (urls.length === 0) {
     return (
-      <div className="text-center py-12">
-        <h2 className="text-xl font-semibold mb-2">No URLs found</h2>
-        <p className="text-muted-foreground mb-4">You need to create a URL to see analytics.</p>
-        <Link to="/dashboard" className="text-primary hover:underline">
+      <div className="flex flex-col items-center justify-center h-[60vh] max-w-md mx-auto text-center p-6 bg-white border-2 border-black rounded-[32px] shadow-hard-lg mt-8">
+        <img 
+          src="/empty_state_illustration.png" 
+          alt="No URLs found" 
+          className="w-40 h-40 object-contain mb-6"
+        />
+        <h2 className="text-3xl font-heading font-extrabold mb-2 text-[#111827]">No URLs found</h2>
+        <p className="text-muted-foreground font-medium mb-8">
+          You need to create a short link first to start tracking analytics!
+        </p>
+        <Link 
+          to="/dashboard" 
+          className="inline-flex items-center justify-center rounded-full text-sm font-bold transition-all hover:-translate-y-1 h-12 px-8 border-2 border-black shadow-hard hover:shadow-hard-lg bg-[#F1C40F] text-black focus-visible:outline-none"
+        >
           Go to Dashboard
         </Link>
       </div>

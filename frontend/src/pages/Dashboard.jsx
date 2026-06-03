@@ -14,6 +14,7 @@ import {
   BarChart, Bar, XAxis, YAxis, Tooltip as RechartsTooltip, ResponsiveContainer, Cell, CartesianGrid
 } from 'recharts';
 import { useSocket } from '../hooks/useSocket';
+import { FullPageLoader } from '../components/ui/FullPageLoader';
 
 const COLORS = ['#e2e2e2', '#e2e2e2', '#e2e2e2', '#F1C40F', '#e2e2e2', '#2ecc71', '#e2e2e2'];
 
@@ -219,7 +220,7 @@ const Dashboard = () => {
       </div>
 
       {loading ? (
-        <div className="text-center py-12 font-bold text-muted-foreground">Loading Analytics...</div>
+        <FullPageLoader fullScreen={false} />
       ) : error ? (
         <div className="text-center py-12 font-bold text-destructive">{error}</div>
       ) : (
@@ -430,8 +431,18 @@ const Dashboard = () => {
                     ))}
                     {data.urls.length === 0 && (
                       <tr>
-                        <td colSpan={5} className="p-4 text-center text-muted-foreground">
-                          No links found. Create one to get started!
+                        <td colSpan={5} className="p-12 text-center text-muted-foreground">
+                          <div className="flex flex-col items-center justify-center max-w-md mx-auto">
+                            <img 
+                              src="/empty_state_illustration.png" 
+                              alt="No links found" 
+                              className="w-24 h-24 object-contain mb-4 grayscale hover:grayscale-0 transition-all duration-300"
+                            />
+                            <h3 className="text-lg font-bold font-heading text-foreground mb-1">It's pretty quiet here...</h3>
+                            <p className="font-medium text-sm mb-4 text-muted-foreground">
+                              Create a new link to get started!
+                            </p>
+                          </div>
                         </td>
                       </tr>
                     )}
