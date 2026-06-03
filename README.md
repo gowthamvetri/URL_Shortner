@@ -455,4 +455,4 @@ This project is a part of a hackathon run by https://katomaran.com
 
 ## 15. Video Link
 
-Explanatory Video Link of this application: 
+Explanatory Video Link of this application: https://www.loom.com/share/5945d3b2d5f043e1a3b55e307f541467
