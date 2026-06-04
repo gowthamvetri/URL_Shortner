@@ -431,28 +431,11 @@ The Node.js backend is well-suited for platforms like Render or Railway.
 
 ---
 
-## 12. README.md Generation
-*(This document itself serves as the complete README.md containing all required sections.)*
-
----
-
-## 13. Hackathon Compliance Check
-
-- [x] Planning Section
-- [x] Feature Documentation
-- [x] Architecture Diagram
-- [x] Setup Instructions
-- [x] Assumptions
-- [x] README Content
-- [x] Demo Video Placeholder: [Insert Demo Video Link Here]
-
----
-
-## 14. Mandatory Footer
+## 12. Mandatory Footer
 
 This project is a part of a hackathon run by https://katomaran.com
 
 
-## 15. Video Link
+## 13. Video Link
 
 Explanatory Video Link of this application: https://www.loom.com/share/5945d3b2d5f043e1a3b55e307f541467
